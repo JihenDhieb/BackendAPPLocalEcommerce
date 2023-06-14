@@ -56,7 +56,7 @@ public class AuthService implements AuthServiceImp {
             return message;
         }
 
-        User user =new User( signUpUser.getEmail(),encoder.encode(signUpUser.getPassword()), Role.CLIENT,signUpUser.getFirstName(),signUpUser.getLastName(),signUpUser.getPhone(),signUpUser.getCin());
+        User user =new User( signUpUser.getEmail(),encoder.encode(signUpUser.getPassword()), Role.CLIENT,signUpUser.getFirstName(),signUpUser.getLastName(),signUpUser.getPhone());
         User user1 = userRepository.save(user);
         return user1.getId();
 

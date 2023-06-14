@@ -38,11 +38,9 @@ public interface UserServiceImpl   {
     String editLongLatDelivery(editLongLatDelivery longLatDelivery);
 
 
+    ResponseEntity<?> addImagesToUser(String id, MultipartFile fileProfile)throws IOException;
 
-
-  ResponseEntity<?> addImagesToUser(String id, MultipartFile fileProfile)throws IOException;
-
-  RevenueDate todayRevenue(String id);
+    RevenueDate todayRevenue(String id);
 
     List<RevenueDate> weekRevenue(String id);
 

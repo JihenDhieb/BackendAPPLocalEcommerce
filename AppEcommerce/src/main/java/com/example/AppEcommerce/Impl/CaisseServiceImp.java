@@ -10,6 +10,7 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface CaisseServiceImp {
 
@@ -71,4 +72,11 @@ public interface CaisseServiceImp {
     void benefitsVendor(String id);
 
     List<User> getListClientByVendor(String id);
+
+
+
+
+    String addAvis(String idArticle, String idSender, String avis);
+
+    Map<String, List<String>> regrouperAvisParArticle();
 }

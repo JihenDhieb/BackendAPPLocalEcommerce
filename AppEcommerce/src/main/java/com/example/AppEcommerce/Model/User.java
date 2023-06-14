@@ -82,15 +82,9 @@ public class User {
         this.latitude = latitude;
     }
 
-    private String cin;
 
-    public String getCin() {
-        return cin;
-    }
 
-    public void setCin(String cin) {
-        this.cin = cin;
-    }
+
 
 
 
@@ -120,14 +114,14 @@ public class User {
     public void setSold(int sold) {
         this.sold = sold;
     }
-    public User(String email, String password, Role role, String firstName, String lastName,String phone,String cin) {
+    public User(String email, String password, Role role, String firstName, String lastName,String phone){
         this.email=email;
         this.password=password;
         this.firstName=firstName;
         this.lastName=lastName;
         this.role=role;
         this.phone=phone;
-        this.cin=cin;
+
 
     }
     public User(String email, String password, String firstName, String lastName, String phone, Role role,  int sold, boolean enLigne,double longitude, double latitude){

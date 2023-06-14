@@ -116,24 +116,7 @@ public class ArticleService  implements ArticleServiceImpl {
         } );
         return articles1;
     }
-   /* @Override
-    public List<Article> findLocal(Activity activity,double lat1, double long1){
-        List<Pages> pages = pagesRepository.findByActivity(activity);
-        List<Article> articles = articlesLess7(lat1,long1);
-        List<Article> newArticles = new ArrayList<>();
-        articles.forEach(article -> {
-            pages.forEach(page-> {
 
-                    if(article.getPage().getId().equals(page.getId()) && Integer.parseInt(article.getNbstock()) > 0){
-                        newArticles.add(article);
-                    }
-
-
-            });
-        });
-        return newArticles;
-
-    }*/
     @Override
     public Article getArticleById(String id) {
         return articleRepository.findById(id)
@@ -155,6 +138,53 @@ public class ArticleService  implements ArticleServiceImpl {
 
         return newPages;
     }
+    @Override
+    public List<Pages> findLocalPagREAUSTAURANTS(Activity activity, double lat1, double long1) {
+        List<Pages> pages = pagesRepository.findByActivity(activity);
+        List<Article> articles = articlesLess7(lat1, long1);
+        List<Pages> newPages = new ArrayList<>();
 
+        articles.forEach(article -> {
+            pages.forEach(page -> {
+                if (article.getPage().getId().equals(page.getId()) && Integer.parseInt(article.getNbstock()) > 0 && page.getActivity() == Activity.RESTAURANTS) {
+                    newPages.add(page);
+                }
+            });
+        });
+
+        return newPages;
+    }
+    @Override
+    public List<Pages> findLocalPagSUPERETTE(Activity activity, double lat1, double long1) {
+        List<Pages> pages = pagesRepository.findByActivity(activity);
+        List<Article> articles = articlesLess7(lat1, long1);
+        List<Pages> newPages = new ArrayList<>();
+
+        articles.forEach(article -> {
+            pages.forEach(page -> {
+                if (article.getPage().getId().equals(page.getId()) && Integer.parseInt(article.getNbstock()) > 0 && page.getActivity() == Activity.SUPERETTE) {
+                    newPages.add(page);
+                }
+            });
+        });
+
+        return newPages;
+    }
+    @Override
+    public List<Pages> findLocalPatisserie(Activity activity, double lat1, double long1) {
+        List<Pages> pages = pagesRepository.findByActivity(activity);
+        List<Article> articles = articlesLess7(lat1, long1);
+        List<Pages> newPages = new ArrayList<>();
+
+        articles.forEach(article -> {
+            pages.forEach(page -> {
+                if (article.getPage().getId().equals(page.getId()) && Integer.parseInt(article.getNbstock()) > 0 && page.getActivity() == Activity.PATISSERIE) {
+                    newPages.add(page);
+                }
+            });
+        });
+
+        return newPages;
+    }
 
 }

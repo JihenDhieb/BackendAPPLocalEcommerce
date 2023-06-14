@@ -15,6 +15,9 @@ public class Article {
     private String description;
     private String prix;
     private String  nbstock;
+
+
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
     private File image;

@@ -1,6 +1,7 @@
 package com.example.AppEcommerce.Repository;
 
 
+import com.example.AppEcommerce.Enum.Status;
 import com.example.AppEcommerce.Model.Caisse;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;

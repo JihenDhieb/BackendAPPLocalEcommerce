@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public class Caisse {
+
     @Id
     String id;
     String idSender;

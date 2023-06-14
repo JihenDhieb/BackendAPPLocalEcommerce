@@ -3,10 +3,20 @@ package com.example.AppEcommerce.Model;
 public class ArticleCaisse {
     String idArticle;
     int qnt;
+    public String getAvis() {
+        return avis;
+    }
 
-    public ArticleCaisse(String idArticle, int qnt) {
+    public void setAvis(String avis) {
+        this.avis = avis;
+    }
+
+   String  avis;
+
+    public ArticleCaisse(String idArticle, int qnt,String avis) {
         this.idArticle = idArticle;
         this.qnt = qnt;
+        this.avis= avis;
     }
 
     public String getIdArticle() {

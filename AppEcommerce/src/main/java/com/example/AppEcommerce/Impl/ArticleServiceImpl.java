@@ -38,4 +38,10 @@ public interface ArticleServiceImpl {
     Article getArticleById(String id);
 
     List<Pages> findLocalPage(Activity activity, double lat1, double long1);
+
+    List<Pages> findLocalPagREAUSTAURANTS(Activity activity, double lat1, double long1);
+
+    List<Pages> findLocalPagSUPERETTE(Activity activity, double lat1, double long1);
+
+    List<Pages> findLocalPatisserie(Activity activity, double lat1, double long1);
 }

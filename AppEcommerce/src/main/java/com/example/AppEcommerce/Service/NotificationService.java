@@ -1,12 +1,14 @@
 package com.example.AppEcommerce.Service;
 
 import com.example.AppEcommerce.Enum.Role;
+import com.example.AppEcommerce.Enum.Status;
 import com.example.AppEcommerce.Model.*;
 
 import com.example.AppEcommerce.Repository.*;
 import com.google.firebase.messaging.*;
 import com.google.firebase.messaging.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -27,7 +29,8 @@ public class NotificationService {
     CaisseRepository caisseRepository;
     @Autowired
     ArticleRepository articleRepository;
-
+    @Autowired
+    ArticleCaisseRepository articleCaisseRepository;
 
 
     @Autowired
@@ -300,6 +303,66 @@ public class NotificationService {
             }
         }
 
+    }
+
+    public void sendClientNotificationForDeliveredCaisse() throws FirebaseMessagingException {
+        FirebaseMessaging messaging = FirebaseMessaging.getInstance();
+
+        List<Caisse> caisses = caisseRepository.findAll();
+
+        Caisse lastDeliveredCaisse = null;
+
+        for (Caisse caisse : caisses) {
+            if (caisse.getStatus() == Status.DELIVERED) {
+                lastDeliveredCaisse = caisse;
+            }
+        }
+
+        if (lastDeliveredCaisse != null) {
+            User user = userRepository.findById(lastDeliveredCaisse.getIdSender())
+                    .orElseThrow();
+            List<ArticleCaisse> articles = lastDeliveredCaisse.getArticles();
+            List<Device> devices = devices(user.getId());
+
+            if (!devices.isEmpty()) {
+                StringBuilder articleNames = new StringBuilder();
+                for (ArticleCaisse articleCaisse : articles) {
+                    Article article = articleRepository.findById(articleCaisse.getIdArticle())
+                            .orElseThrow(() -> new NoSuchElementException("Article not found with ID " + articleCaisse.getIdArticle()));
+                    articleNames.append(article.getNom()).append(", ");
+                }
+
+                if (articleNames.length() > 0) {
+                    articleNames.setLength(articleNames.length() - 2);
+                }
+
+                String notificationTitle = "Votre avis sur la caisse " + lastDeliveredCaisse.getReference() + " Articles : " + articleNames.toString();
+
+                Notification notification = Notification.builder()
+                        .setTitle(notificationTitle)
+                        .build();
+
+                Map<String, String> data = new HashMap<>();
+                data.put("idCaisse", lastDeliveredCaisse.getId());
+
+                for (Device device : devices) {
+                    try {
+                        String value = "Avis";  // Remplacez "your_value_here" par la valeur souhaitée
+                        Message message = Message.builder()
+                                .setNotification(notification)
+                                .putAllData(data)
+                                .putData("Value", value)  // Ajoutez la clé "Value" avec la valeur spécifiée
+                                .setToken(device.getToken())
+                                .build();
+
+                        messaging.send(message);
+                    } catch (FirebaseMessagingException e) {
+                        e.printStackTrace();
+                        // Gérer l'exception FirebaseMessagingException ici
+                    }
+                }
+            }
+        }
     }
 
 }

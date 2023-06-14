@@ -204,14 +204,12 @@ public class UserService implements UserServiceImpl {
         User user = getUserById(id);
         BenifitsVendor todayBenifitsVendor = null;
         List<BenifitsVendor> benifitsVendors = user.getBenifitsVendors();
-
         for (BenifitsVendor benifitsVendor : benifitsVendors) {
             if (benifitsVendor.getDate().equals(LocalDate.now())) {
                 todayBenifitsVendor = benifitsVendor;
                 break;
             }
         }
-
         return todayBenifitsVendor;
     }
 

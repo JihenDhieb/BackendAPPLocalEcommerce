@@ -3,7 +3,9 @@ package com.example.AppEcommerce.Controller;
 import com.example.AppEcommerce.Dto.CaisseDto;
 import com.example.AppEcommerce.Dto.PushNotificationRequest;
 import com.example.AppEcommerce.Dto.getArticleCaisseDto;
+import com.example.AppEcommerce.Enum.Status;
 import com.example.AppEcommerce.Model.*;
+import com.example.AppEcommerce.Repository.CaisseRepository;
 import com.example.AppEcommerce.Service.CaisseService;
 import com.example.AppEcommerce.Service.NotificationService;
 import com.example.AppEcommerce.Service.UserService;
@@ -24,6 +26,9 @@ import java.util.NoSuchElementException;
 public class CaisseController {
     @Autowired
     CaisseService caisseService;
+    @Autowired
+    NotificationService notificationService;
+    CaisseRepository caisseRepository;
 
     @PostMapping(value = "/add")
     public String addCaisse(@RequestBody CaisseDto caisseDto) throws FirebaseMessagingException {
@@ -167,4 +172,31 @@ public class CaisseController {
         return caisseService.getListClientByVendor(id);
     }
 
+    @PostMapping("/send-notification")
+    public ResponseEntity<String> sendNotificationForDeliveredCaisse() {
+        try {
+            notificationService.sendClientNotificationForDeliveredCaisse();
+            return ResponseEntity.ok("Notifications sent successfully.");
+        } catch (FirebaseMessagingException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send notifications.");
+        }
+    }
+    @PostMapping("/avis/{idArticle}/{idSender}")
+    public ResponseEntity<String> addAvis(
+            @PathVariable String idArticle,
+            @PathVariable String idSender,
+            @RequestBody String avis) {
+        try {
+            String updatedArticleId = caisseService.addAvis(idArticle,idSender, avis);
+            return ResponseEntity.ok(updatedArticleId);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/avis/regroupes")
+    public ResponseEntity<Map<String, List<String>>> regrouperAvisParArticle() {
+        Map<String, List<String>> avisParArticle = caisseService.regrouperAvisParArticle();
+        return ResponseEntity.ok(avisParArticle);
+    }
 }

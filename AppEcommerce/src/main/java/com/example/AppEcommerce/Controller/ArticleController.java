@@ -38,35 +38,52 @@ public class ArticleController {
     }
 
     @GetMapping("/findArticlesByPage/{id}")
-    public List<Article> findByPage(@PathVariable String id){
+    public List<Article> findByPage(@PathVariable String id) {
         return articleService.findByPage(id);
     }
+
     @PostMapping("/editimage/{id}")
     public ResponseEntity<?> editimage(@RequestPart(name = "image", required = false) MultipartFile file, @PathVariable String id) throws IOException {
         return articleService.editimage(id, file);
     }
+
     @PutMapping("/editArticle")
     public ResponseEntity<?> editArticle(@RequestBody ArticleDto ArticleDto) {
         return articleService.editArticle(ArticleDto);
 
     }
+
     @GetMapping(value = "/deleteArticle/{id}")
     public void deleteArticle(@PathVariable String id) {
         articleService.deleteArticle(id);
     }
 
     @PostMapping("/articlesByCategory")
-    public List<Article> articlesByCategory(@RequestBody Activity activity){
+    public List<Article> articlesByCategory(@RequestBody Activity activity) {
         return articleService.findByCategory(activity);
     }
 
     @PostMapping("/articlesLocal/{lat}/{lon}")
-    public List<Pages> check(@RequestBody Activity activity, @PathVariable double lat, @PathVariable double lon){
-        return articleService.findLocalPage(activity,lat,lon);
+    public List<Pages> check(@RequestBody Activity activity, @PathVariable double lat, @PathVariable double lon) {
+        return articleService.findLocalPage(activity, lat, lon);
     }
+
     @GetMapping(value = "/getarticle/{id}")
     public Article getArticleById(@PathVariable String id) {
         return articleService.getArticleById(id);
     }
 
+
+    @PostMapping("/articlesLocalREAUSTAURANTS/{lat}/{lon}")
+    public List<Pages> checkReaustaurants(@RequestBody Activity activity, @PathVariable double lat, @PathVariable double lon) {
+        return articleService.findLocalPagREAUSTAURANTS(activity, lat, lon);
+    }
+    @PostMapping("/articlesLocalSUPERETTE/{lat}/{lon}")
+    public List<Pages> checkSuperette(@RequestBody Activity activity, @PathVariable double lat, @PathVariable double lon) {
+        return articleService.findLocalPagSUPERETTE(activity, lat, lon);
+    }
+    @PostMapping("/articlesLocalPATISSERIE/{lat}/{lon}")
+    public List<Pages> checkPattiserie(@RequestBody Activity activity, @PathVariable double lat, @PathVariable double lon) {
+        return articleService.findLocalPatisserie(activity, lat, lon);
+    }
 }

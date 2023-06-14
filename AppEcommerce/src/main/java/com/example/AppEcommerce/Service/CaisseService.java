@@ -36,6 +36,8 @@ public class CaisseService implements CaisseServiceImp {
     private ArticleRepository articleRepository;
     @Autowired
    private BenifitsVendorRepository benifitsVendorRepository;
+    @Autowired
+    private ArticleCaisseRepository articleCaisseRepository;
     @Override
     public String addCaisse(CaisseDto caisseDto) throws FirebaseMessagingException {
         User user = userService.getUserByPage(caisseDto.getIdPage());
@@ -327,7 +329,7 @@ public class CaisseService implements CaisseServiceImp {
 
                   BenifitsVendor benifitsVendor = benifitsVendorMap.get(caisseDate);
                   if (benifitsVendor == null) {
-                      // Aucun objet BenifitsVendor pour cette date, créer un nouveau
+
                       benifitsVendor = new BenifitsVendor(0, 0, 0, caisseDate);
                       benifitsVendorMap.put(caisseDate, benifitsVendor);
                   }
@@ -403,8 +405,68 @@ public class CaisseService implements CaisseServiceImp {
         }
         return users;
     }
+    @Override
+    public String addAvis(String idArticle, String idSender, String avis) {
+        List<Caisse> caisses = caisseRepository.findAll();
+        for (Caisse caisse : caisses) {
+            if (caisse.getStatus() == Status.DELIVERED) {
+                List<ArticleCaisse> articles = caisse.getArticles();
+                for (ArticleCaisse articleCaisse : articles) {
+                    if (articleCaisse.getIdArticle().equals(idArticle)) {
+                        Article article = articleRepository.findById(idArticle)
+                                .orElseThrow(() -> new NoSuchElementException("Article not found with ID " + idArticle));
+                        if (articleCaisse.getAvis() == null || articleCaisse.getAvis().isEmpty()) {
+                            articleCaisse.setAvis(avis);
+                            articleCaisseRepository.save(articleCaisse);
+                            caisseRepository.save(caisse); // Enregistrer la caisse modifiée
+                            return articleCaisse.getIdArticle();
+                        } else {
+                            // Vérification de l'avis uniquement pour les articles de la même caisse
+                            if (caisse.getIdSender().equals(idSender)) {
+                                throw new IllegalArgumentException("An existing review already exists for the article.");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        throw new NoSuchElementException("ArticleCaisse not found with ID " + idArticle);
+    }
+    @Override
+    public Map<String, List<String>> regrouperAvisParArticle() {
+        Map<String, List<String>> avisParArticle = new HashMap<>();
+        List<Caisse> caisses = caisseRepository.findAll();
+        for (Caisse caisse : caisses) {
+            if (caisse.getStatus() == Status.DELIVERED) {
+                List<ArticleCaisse> articles = caisse.getArticles();
+                for (ArticleCaisse articleCaisse : articles) {
+                    String idArticle = articleCaisse.getIdArticle();
+                    String avis = articleCaisse.getAvis();
+
+                    if (avis != null) { // Exclude null values
+                        List<String> avisList = avisParArticle.getOrDefault(idArticle, new ArrayList<>());
+                        avisList.add(avis);
+                        avisParArticle.put(idArticle, avisList);
+                    }
+                }
+            }
+        }
+
+        return avisParArticle;
+    }
+
 
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
