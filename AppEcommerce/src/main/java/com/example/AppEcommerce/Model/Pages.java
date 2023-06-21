@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -27,6 +28,15 @@ public class Pages {
     private double longitude;
 
     private double latitude;
+    private boolean enLigne;
+
+    public boolean isEnLigne() {
+        return enLigne;
+    }
+
+    public void setEnLigne(boolean enLigne) {
+        this.enLigne = enLigne;
+    }
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "image_profil_id")
@@ -134,5 +144,6 @@ public class Pages {
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
+
 
 }

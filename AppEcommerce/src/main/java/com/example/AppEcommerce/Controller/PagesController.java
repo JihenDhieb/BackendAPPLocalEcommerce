@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/pages")
@@ -50,5 +51,13 @@ public class PagesController {
     @PostMapping("/editCouverture/{id}")
     public ResponseEntity<?> editCouverture(@RequestPart(name = "imageCouverture", required = false) MultipartFile fileCouverture, @PathVariable String id) throws IOException {
         return pagesService.editPhotoCouverture(id,fileCouverture);
+    }
+    @GetMapping("/modifyStatusPage/{id}")
+    public void modifyStatusPage(@PathVariable("id") String id) {
+        pagesService.modifyStatusPage(id);
+    }
+    @GetMapping("/search")
+    public List<String> searchPageByTitle(@RequestParam("letter") String searchLetter) {
+        return pagesService.searchPageByTitle(searchLetter);
     }
 }

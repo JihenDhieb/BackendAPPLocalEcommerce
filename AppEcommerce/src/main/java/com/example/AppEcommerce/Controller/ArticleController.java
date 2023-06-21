@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/article")
@@ -85,5 +86,18 @@ public class ArticleController {
     @PostMapping("/articlesLocalPATISSERIE/{lat}/{lon}")
     public List<Pages> checkPattiserie(@RequestBody Activity activity, @PathVariable double lat, @PathVariable double lon) {
         return articleService.findLocalPatisserie(activity, lat, lon);
+    }
+    @PostMapping("/articlesLocalCAFE/{lat}/{lon}")
+    public List<Pages> checkCAFE(@RequestBody Activity activity, @PathVariable double lat, @PathVariable double lon) {
+        return articleService.findLocalCAFE(activity, lat, lon);
+    }
+    @GetMapping("/pages/{title}")
+    public ResponseEntity<Pages> getPageByTitle(@PathVariable String title) {
+        try {
+            Pages page = articleService.findPagebytitle(title);
+            return ResponseEntity.ok(page);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

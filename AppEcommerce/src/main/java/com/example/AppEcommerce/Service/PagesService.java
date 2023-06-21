@@ -131,6 +131,24 @@ public class PagesService  implements PagesServiceImpl {
             }
         }
     }
+    @Override
+    public void modifyStatusPage(String id){
+       Pages page = pagesRepository.findById(id) .orElseThrow(()-> new NoSuchElementException("page not found with ID"+id));
+        page.setEnLigne(!page.isEnLigne());
+       pagesRepository.save(page);
+    }
+   @Override
+   public List<String> searchPageByTitle(String searchLetter) {
+        List<Pages> pages = pagesRepository.findAll();
+        List<String> matchingTitles = new ArrayList<>();
+        for (Pages page : pages) {
+            String title = page.getTitle();
+            if (title.toLowerCase().contains(searchLetter.toLowerCase())) {
+                matchingTitles.add(title);
+            }
+        }
+        return matchingTitles;
+    }
 
 
     }

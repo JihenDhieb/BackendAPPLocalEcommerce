@@ -166,18 +166,6 @@ public class CaisseService implements CaisseServiceImp {
             delivery.getRevenueDates().add(revenueDate1);
             userRepository.save(delivery);
         }
-
-
-        List<ArticleCaisse> articleCaisseList = caisse.getArticles();
-        articleCaisseList.forEach(articleCaisse -> {
-            Article article = articleRepository.findById(articleCaisse.getIdArticle())
-                    .orElseThrow(() -> new NoSuchElementException("user not found with ID" + articleCaisse.getIdArticle()));
-            String nbStock = article.getNbstock();
-            int nbStockNew = Integer.parseInt(nbStock) - articleCaisse.getQnt();
-            article.setNbstock(String.valueOf(nbStockNew));
-            articleRepository.save(article);
-        });
-
     }
 
     @Override

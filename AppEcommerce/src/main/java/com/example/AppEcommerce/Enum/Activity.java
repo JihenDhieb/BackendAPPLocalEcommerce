@@ -5,6 +5,6 @@ public enum Activity {
     RESTAURANTS,
 
     SUPERETTE,
-    SPORTS,
+    CAFE,
     PATISSERIE,
 }

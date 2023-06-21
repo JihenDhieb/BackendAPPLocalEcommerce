@@ -30,4 +30,9 @@ public interface PagesServiceImpl {
     ResponseEntity<?> editPhotoCouverture(String id, MultipartFile fileCouverture)throws IOException;
 
     void deletePage(String idPage, String idUser);
+
+    void modifyStatusPage(String id);
+
+
+    List<String> searchPageByTitle(String searchLetter);
 }

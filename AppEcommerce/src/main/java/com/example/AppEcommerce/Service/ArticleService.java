@@ -36,7 +36,7 @@ public class ArticleService  implements ArticleServiceImpl {
     @Override
     public String  addArticle(String id, ArticleDto articleDto) {
         Pages page =pagesRepository.findById(id).orElseThrow(null);
-        Article article =new Article(articleDto.getNom(),articleDto.getDescription(),articleDto.getPrix(),articleDto.getNbstock(),page);
+        Article article =new Article(articleDto.getNom(),articleDto.getDescription(),articleDto.getPrix(),page);
       Article article1= articleRepository.save(article);
         return article1.getId();
     }
@@ -69,7 +69,6 @@ public class ArticleService  implements ArticleServiceImpl {
         article.setNom(articleDto.getNom());
         article.setDescription(articleDto.getDescription());
         article.setPrix(articleDto.getPrix());
-        article.setNbstock(articleDto.getNbstock());
         articleRepository.save(article);
         return ResponseEntity.ok(new MessageResponse("Article edit successufuly "));
     }
@@ -86,7 +85,7 @@ public class ArticleService  implements ArticleServiceImpl {
     articles.forEach(article -> {
         pages.forEach(page-> {
             if(article.getPage().getActivity() != Activity.RESTAURANTS && article.getPage().getActivity() != Activity.SUPERETTE && article.getPage().getActivity() != Activity.PATISSERIE ){
-                if(article.getPage().getId().equals(page.getId()) && Integer.parseInt(article.getNbstock()) > 0){
+                if(article.getPage().getId().equals(page.getId())){
                     newArticles.add(article);
                 }
             }
@@ -130,7 +129,7 @@ public class ArticleService  implements ArticleServiceImpl {
 
         articles.forEach(article -> {
             pages.forEach(page -> {
-                if (article.getPage().getId().equals(page.getId()) && Integer.parseInt(article.getNbstock()) > 0) {
+                if (article.getPage().getId().equals(page.getId())) {
                     newPages.add(page);
                 }
             });
@@ -146,7 +145,7 @@ public class ArticleService  implements ArticleServiceImpl {
 
         articles.forEach(article -> {
             pages.forEach(page -> {
-                if (article.getPage().getId().equals(page.getId()) && Integer.parseInt(article.getNbstock()) > 0 && page.getActivity() == Activity.RESTAURANTS) {
+                if (article.getPage().getId().equals(page.getId())  && page.getActivity() == Activity.RESTAURANTS) {
                     newPages.add(page);
                 }
             });
@@ -162,7 +161,7 @@ public class ArticleService  implements ArticleServiceImpl {
 
         articles.forEach(article -> {
             pages.forEach(page -> {
-                if (article.getPage().getId().equals(page.getId()) && Integer.parseInt(article.getNbstock()) > 0 && page.getActivity() == Activity.SUPERETTE) {
+                if (article.getPage().getId().equals(page.getId())  && page.getActivity() == Activity.SUPERETTE) {
                     newPages.add(page);
                 }
             });
@@ -178,13 +177,44 @@ public class ArticleService  implements ArticleServiceImpl {
 
         articles.forEach(article -> {
             pages.forEach(page -> {
-                if (article.getPage().getId().equals(page.getId()) && Integer.parseInt(article.getNbstock()) > 0 && page.getActivity() == Activity.PATISSERIE) {
+                if (article.getPage().getId().equals(page.getId())  && page.getActivity() == Activity.PATISSERIE) {
                     newPages.add(page);
                 }
             });
         });
 
         return newPages;
+    }
+    @Override
+    public List<Pages> findLocalCAFE(Activity activity, double lat1, double long1) {
+        List<Pages> pages = pagesRepository.findByActivity(activity);
+        List<Article> articles = articlesLess7(lat1, long1);
+        List<Pages> newPages = new ArrayList<>();
+
+        articles.forEach(article -> {
+            pages.forEach(page -> {
+                if (article.getPage().getId().equals(page.getId())  && page.getActivity() == Activity.CAFE) {
+                    newPages.add(page);
+                }
+            });
+        });
+
+        return newPages;
+    }
+
+    @Override
+    public Pages findPagebytitle(String pageTitle) {
+        Pages page = pagesRepository.findByTitle(pageTitle);
+        if (page == null) {
+            throw new NoSuchElementException("Page not found with title: " + pageTitle);
+        }
+
+        List<Article> articles = articlesLess7(page.getLatitude(), page.getLongitude());
+        if (articles.isEmpty()) {
+            throw new NoSuchElementException("No articles found for the page with title: " + pageTitle);
+        }
+
+        return page;
     }
 
 }

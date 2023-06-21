@@ -44,4 +44,11 @@ public interface ArticleServiceImpl {
     List<Pages> findLocalPagSUPERETTE(Activity activity, double lat1, double long1);
 
     List<Pages> findLocalPatisserie(Activity activity, double lat1, double long1);
+
+    List<Pages> findLocalCAFE(Activity activity, double lat1, double long1);
+
+
+
+
+    Pages findPagebytitle(String pageTitle);
 }

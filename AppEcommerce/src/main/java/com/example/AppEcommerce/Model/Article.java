@@ -14,7 +14,7 @@ public class Article {
     private String nom;
     private String description;
     private String prix;
-    private String  nbstock;
+
 
 
 
@@ -27,11 +27,10 @@ public class Article {
     private Pages page;
     public Article(){};
 
-    public Article(String nom, String description, String prix, String nbstock, Pages page) {
+    public Article(String nom, String description, String prix, Pages page) {
         this.nom=nom;
         this.description=description;
         this.prix=prix;
-        this.nbstock=nbstock;
         this.page=page;
     }
 
@@ -59,13 +58,7 @@ public class Article {
         this.prix = prix;
     }
 
-    public String getNbstock() {
-        return nbstock;
-    }
 
-    public void setNbstock(String nbstock) {
-        this.nbstock = nbstock;
-    }
 
     public File getImage() {
         return image;
