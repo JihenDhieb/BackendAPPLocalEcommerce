@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CaisseService implements CaisseServiceImp {
@@ -295,51 +296,46 @@ public class CaisseService implements CaisseServiceImp {
     }
 
 
-  public void benefitsVendor(String id) {
-      List<Caisse> caisses = caisseRepository.findByidVendor(id);
-      if (!caisses.isEmpty()) {
-          User user = userRepository.findById(id)
-                  .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + id));
+    public void benefitsVendor(String id) {
+        List<Caisse> caisses = caisseRepository.findByidVendor(id);
+        if (!caisses.isEmpty()) {
+            User user = userRepository.findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + id));
+            List<BenifitsVendor> benifitsVendors = user.getBenifitsVendors();
+            Map<LocalDate, BenifitsVendor> benifitsVendorMap = new HashMap<>();
 
-          List<BenifitsVendor> benifitsVendors = user.getBenifitsVendors();
+            // Vérifier si les bénéfices existent déjà pour les dates des caisses
+            Set<LocalDate> existingDates = benifitsVendors.stream()
+                    .map(BenifitsVendor::getDate)
+                    .collect(Collectors.toSet());
 
-          // Vérifier si le calcul a déjà été effectué
-          if (!benifitsVendors.isEmpty()) {
-              return; // Sortir de la méthode, le calcul a déjà été fait
-          }
+            // Supprimer les bénéfices existants pour les dates des caisses
+            benifitsVendors.removeIf(benifitsVendor -> existingDates.contains(benifitsVendor.getDate()));
 
-          // Map pour stocker les BenifitsVendor par date
-          Map<LocalDate, BenifitsVendor> benifitsVendorMap = new HashMap<>();
+            for (Caisse caisse : caisses) {
+                if (caisse.getStatus() == Status.DELIVERED) {
+                    LocalDate caisseDate = caisse.getDate();
 
-          for (Caisse caisse : caisses) {
-              if (caisse.getStatus() == Status.DELIVERED) {
-                  LocalDate caisseDate = caisse.getDate();
+                    BenifitsVendor benifitsVendor = benifitsVendorMap.get(caisseDate);
+                    if (benifitsVendor == null) {
+                        benifitsVendor = new BenifitsVendor(0, 0, 0, caisseDate);
+                        benifitsVendorMap.put(caisseDate, benifitsVendor);
+                    }
+                    double newChiffre = benifitsVendor.getChiffre() + caisse.getSubTotal();
+                    benifitsVendor.setChiffre(newChiffre);
+                    int newFrais = benifitsVendor.getFrais() + 1;
+                    benifitsVendor.setFrais(newFrais);
+                    int newBenefits = (int) (newChiffre - newFrais);
+                    benifitsVendor.setBenefits(newBenefits);
+                }
+            }
 
-                  BenifitsVendor benifitsVendor = benifitsVendorMap.get(caisseDate);
-                  if (benifitsVendor == null) {
+            benifitsVendorRepository.saveAll(benifitsVendorMap.values());
+            user.getBenifitsVendors().addAll(benifitsVendorMap.values());
+            userRepository.save(user);
+        }
+    }
 
-                      benifitsVendor = new BenifitsVendor(0, 0, 0, caisseDate);
-                      benifitsVendorMap.put(caisseDate, benifitsVendor);
-                  }
-
-                  // Mettre à jour les chiffres de l'objet BenifitsVendor
-                  double newChiffre = benifitsVendor.getChiffre() + caisse.getSubTotal();
-                  benifitsVendor.setChiffre(newChiffre);
-                  int newFrais = benifitsVendor.getFrais() + 1;
-                  benifitsVendor.setFrais(newFrais);
-                  int newBenefits = (int) (newChiffre - newFrais);
-                  benifitsVendor.setBenefits(newBenefits);
-              }
-          }
-
-          // Sauvegarder les objets BenifitsVendor dans le référentiel
-          benifitsVendorRepository.saveAll(benifitsVendorMap.values());
-
-          // Ajouter les objets BenifitsVendor à la liste de l'utilisateur et sauvegarder les modifications
-          user.getBenifitsVendors().addAll(benifitsVendorMap.values());
-          userRepository.save(user);
-      }
-  }
     public double calculateTotalRevenue(String id) {
         double totalRevenue = 0;
         User user = userRepository.findById(id)
