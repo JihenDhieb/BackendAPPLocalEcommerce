@@ -42,7 +42,7 @@ public interface CaisseServiceImp {
 
     void SetStatutdelivred(String idCaisse);
 
-    void SetSold(String idCaisse);
+
 
 
     LocalDate getDateByIdCaisse(String idCaisse);
@@ -73,10 +73,48 @@ public interface CaisseServiceImp {
 
     List<User> getListClientByVendor(String id);
 
-
-
-
     String addAvis(String idArticle, String idSender, String avis);
 
-    Map<String, List<String>> regrouperAvisParArticle();
+
+
+
+
+    List<String> getAvisParArticle(String idArticle);
+
+    double fraisDelivery(String idCaisse);
+
+    double calculateDistance(double lat1, double lon1, double lat2, double lon2);
+
+    //Admin
+
+    //update solde pour sous admin
+    void UpdateSoldeSousAdmin(String id, String id2, int i);
+
+    //update solde pour sous admin (carger le page)
+    void PageUpdateSolde(String id, String id2, int i);
+
+    //reset sous admin
+    void Reset(String id);
+
+    //update etat
+    void UpdateEtat(String id);
+
+    int todaysales();
+
+    //total sales
+    Double totalsales();
+
+    int SalesARTToday();
+
+    int SalesART();
+
+    int revenuLivreurT();
+
+    //nbre de livraison total
+    int revenuLivreur();
+
+    //revenu admin today
+    double adminRevenu();
+
+    double AdmeinRedvenuTotal();
 }

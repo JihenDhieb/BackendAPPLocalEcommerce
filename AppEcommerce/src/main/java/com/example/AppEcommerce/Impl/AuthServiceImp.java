@@ -1,10 +1,7 @@
 package com.example.AppEcommerce.Impl;
 
 
-import com.example.AppEcommerce.Dto.LoginRequest;
-import com.example.AppEcommerce.Dto.SignUpAdmin;
-import com.example.AppEcommerce.Dto.SignUpDelivery;
-import com.example.AppEcommerce.Dto.SignUpUser;
+import com.example.AppEcommerce.Dto.*;
 import com.example.AppEcommerce.Model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,4 +19,5 @@ public interface AuthServiceImp {
     ResponseEntity<?> login(LoginRequest loginRequest);
 
 
+    ResponseEntity<?> registerSousAdmin(SignUpSousAdmin signUpAdmin);
 }

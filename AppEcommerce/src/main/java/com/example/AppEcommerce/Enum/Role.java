@@ -5,6 +5,7 @@ public enum Role {
 
     CLIENT,
 
-    DELIVERY
+    DELIVERY,
 
+    SOUS_ADMIN
 }

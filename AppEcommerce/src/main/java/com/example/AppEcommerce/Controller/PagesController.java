@@ -3,6 +3,7 @@ package com.example.AppEcommerce.Controller;
 import com.example.AppEcommerce.Dto.PagesDto;
 import com.example.AppEcommerce.Dto.SignUpUser;
 import com.example.AppEcommerce.Model.Pages;
+import com.example.AppEcommerce.Repository.PagesRepository;
 import com.example.AppEcommerce.Service.PagesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +20,8 @@ import java.util.List;
 public class PagesController {
     @Autowired
     private PagesService pagesService;
-
+    @Autowired
+    private PagesRepository pagesRepository;
     @PostMapping(value = "/add/{id}")
     public String addPage(@PathVariable String id, @RequestBody PagesDto pagesDto) {
         return pagesService.addPage(id, pagesDto);
@@ -59,5 +61,9 @@ public class PagesController {
     @GetMapping("/search")
     public List<String> searchPageByTitle(@RequestParam("letter") String searchLetter) {
         return pagesService.searchPageByTitle(searchLetter);
+    }
+    @GetMapping(value="/findAllPages")
+    public List<Pages> findAllP(){
+        return pagesRepository.findAll();
     }
 }

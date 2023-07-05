@@ -58,7 +58,6 @@ public class Pages {
         this.latitude = latitude;
     }
 
-
     public String getTitle() {
         return title;
     }

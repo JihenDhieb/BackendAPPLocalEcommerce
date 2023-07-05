@@ -1,9 +1,6 @@
 package com.example.AppEcommerce.Service;
 
-import com.example.AppEcommerce.Dto.MessageResponse;
-import com.example.AppEcommerce.Dto.SignUpDelivery;
-import com.example.AppEcommerce.Dto.SignUpUser;
-import com.example.AppEcommerce.Dto.editLongLatDelivery;
+import com.example.AppEcommerce.Dto.*;
 import com.example.AppEcommerce.Impl.UserServiceImpl;
 import com.example.AppEcommerce.Model.*;
 import com.example.AppEcommerce.Repository.CaisseRepository;
@@ -142,6 +139,23 @@ public class UserService implements UserServiceImpl {
         return userUpdated.getId();
     }
     @Override
+    public double SetSoldDelivery(double Commission, SignUpDelivery signUpDelivery){
+        User delivery = getUserById(signUpDelivery.getId());
+        double solde1=0.0;
+        solde1 = delivery.getSold() - Commission;
+        delivery.setSold(solde1);
+        User client1=userRepository.save(delivery);
+        return solde1;
+    }
+    @Override
+    public String editLongLatUser(editLongLatUser longLatUser){
+        User user = getUserById(longLatUser.getId());
+        user.setLatitude(longLatUser.getLatitude());
+        user.setLongitude(longLatUser.getLongitude());
+        User userUpdated = userRepository.save(user);
+        return userUpdated.getId();
+    }
+    @Override
     public ResponseEntity<?> addImagesToUser(String id, MultipartFile fileProfile)throws IOException {
         File imageProfile = new File(fileProfile.getOriginalFilename(), fileProfile.getContentType(), fileProfile.getBytes());
         Optional<User> user= userRepository.findById(id);
@@ -249,8 +263,6 @@ public class UserService implements UserServiceImpl {
 
         return monthRevenue;
     }
-
-
 }
 
 

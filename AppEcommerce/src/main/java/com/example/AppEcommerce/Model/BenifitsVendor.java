@@ -4,22 +4,22 @@ import java.time.LocalDate;
 
 public class BenifitsVendor {
     String id;
-    int benefits;
+  double benefits;
     private double chiffre;
-    private int frais;
+    private double frais;
     LocalDate date;
-public BenifitsVendor(int benefits,double chiffre,int frais,LocalDate date){
+public BenifitsVendor(double benefits,double chiffre,double  frais,LocalDate date){
     this.benefits=benefits;
     this.chiffre=chiffre;
     this.frais=frais;
     this.date=date;
 
 }
-    public int getBenefits() {
+    public double  getBenefits() {
         return benefits;
     }
 
-    public void setBenefits(int benefits) {
+    public void setBenefits(double  benefits) {
         this.benefits = benefits;
     }
 
@@ -31,11 +31,11 @@ public BenifitsVendor(int benefits,double chiffre,int frais,LocalDate date){
         this.chiffre= chiffre;
     }
 
-    public int getFrais() {
+    public double  getFrais() {
         return frais;
     }
 
-    public void setFrais(int frais) {
+    public void setFrais(double  frais) {
         this.frais = frais;
     }
 

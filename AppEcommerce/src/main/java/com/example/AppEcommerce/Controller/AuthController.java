@@ -1,9 +1,6 @@
 package com.example.AppEcommerce.Controller;
 
-import com.example.AppEcommerce.Dto.LoginRequest;
-import com.example.AppEcommerce.Dto.SignUpAdmin;
-import com.example.AppEcommerce.Dto.SignUpDelivery;
-import com.example.AppEcommerce.Dto.SignUpUser;
+import com.example.AppEcommerce.Dto.*;
 import com.example.AppEcommerce.Service.AuthService;
 import com.example.AppEcommerce.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +36,8 @@ public class AuthController {
     public ResponseEntity<?> registerDelivery(@Valid @RequestBody SignUpDelivery signUpDelivery){
         return authService.registerDelivery(signUpDelivery);
     }
-
+    @PostMapping("/SousAdmin")
+    public ResponseEntity<?> SousAd(@Valid @RequestBody SignUpSousAdmin signUpSousAdmin){
+        return authService.registerSousAdmin(signUpSousAdmin);
+    }
 }

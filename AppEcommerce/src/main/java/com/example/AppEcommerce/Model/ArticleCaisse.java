@@ -3,6 +3,16 @@ package com.example.AppEcommerce.Model;
 public class ArticleCaisse {
     String idArticle;
     int qnt;
+    private String  prix;
+
+    public String getPrix() {
+        return prix;
+    }
+
+    public void setPrix(String prix) {
+        this.prix = prix;
+    }
+
     public String getAvis() {
         return avis;
     }
@@ -12,6 +22,7 @@ public class ArticleCaisse {
     }
 
    String  avis;
+    
 
     public ArticleCaisse(String idArticle, int qnt,String avis) {
         this.idArticle = idArticle;

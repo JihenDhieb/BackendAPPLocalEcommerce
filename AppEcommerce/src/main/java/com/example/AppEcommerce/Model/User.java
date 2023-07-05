@@ -34,6 +34,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String phone;
+    private boolean etat;
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToMany(fetch = FetchType.LAZY,
@@ -48,6 +49,17 @@ public class User {
             cascade = CascadeType.ALL,orphanRemoval = true)
     private List<BenifitsVendor> benifitsVendors =new ArrayList<>();
 
+    public User(String email, String password, Role role, String firstName, String lastName,String phone,String ville) {
+        this.email=email;
+        this.password=password;
+        this.firstName=firstName;
+        this.lastName=lastName;
+        this.role=role;
+        this.ville=ville;
+        this.phone=phone;
+
+    }
+
 
     public List<BenifitsVendor> getBenifitsVendors() {
         return benifitsVendors;
@@ -57,7 +69,7 @@ public class User {
         this.benifitsVendors = benifitsVendors;
     }
 
-    private int sold;
+    private double sold;
 
 
     private boolean enLigne;
@@ -65,6 +77,9 @@ public class User {
     private double longitude;
 
     private double latitude;
+    private String ville;
+    private double compteurC;
+    private double t;
 
     public double getLongitude() {
         return longitude;
@@ -107,11 +122,11 @@ public class User {
     }
 
 
-    public int  getSold() {
+    public double  getSold() {
         return sold;
     }
 
-    public void setSold(int sold) {
+    public void setSold(double sold) {
         this.sold = sold;
     }
     public User(String email, String password, Role role, String firstName, String lastName,String phone){

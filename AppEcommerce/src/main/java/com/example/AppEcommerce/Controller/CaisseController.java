@@ -91,10 +91,6 @@ public class CaisseController {
     public void SetStatutdelivred(@PathVariable String id) throws FirebaseMessagingException {
         caisseService.SetStatutdelivred(id);
     }
-    @GetMapping(value = "/SetSold/{id}")
-    public void SetSold(@PathVariable String id) throws FirebaseMessagingException {
-        caisseService.SetSold(id);
-    }
     @GetMapping("/{idCaisse}/date")
     public ResponseEntity<LocalDate> getCaisseDateById(@PathVariable String idCaisse) {
         LocalDate date = caisseService.getDateByIdCaisse(idCaisse);
@@ -194,9 +190,67 @@ public class CaisseController {
             return ResponseEntity.notFound().build();
         }
     }
-    @GetMapping("/avis/regroupes")
-    public ResponseEntity<Map<String, List<String>>> regrouperAvisParArticle() {
-        Map<String, List<String>> avisParArticle = caisseService.regrouperAvisParArticle();
-        return ResponseEntity.ok(avisParArticle);
+    @GetMapping("/{idArticle}/avis")
+    public ResponseEntity<List<String>> afficherAvisParArticle(@PathVariable String idArticle) {
+        List<String> avisList = caisseService.getAvisParArticle(idArticle);
+
+        if (!avisList.isEmpty()) {
+            return ResponseEntity.ok(avisList);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
+
+    //ADMIN ----------------------------------------------------------------------------------------------
+    @GetMapping("/getAll")
+    public List<Caisse> getList() {
+        return caisseRepository.findAll();
+    }
+    //modifier le solde et compteur la somme de solde ajouter pour le sous admin pour le sous admin
+    @PutMapping("/UpdateSoldeSousAdmin/{id}/{id2}")
+    public void SoldesousAdmin(@PathVariable String id ,@PathVariable String id2,@RequestBody int i){
+        caisseService.UpdateSoldeSousAdmin(id,id2,i);
+    }
+    @PutMapping("/PagesSoldeSousAdmin/{id}/{id2}")
+    public void PagesSoldesousAdmin(@PathVariable String id ,@PathVariable String id2,@RequestBody int i){
+        caisseService.PageUpdateSolde(id,id2,i);
+    }
+    //reset le compteur pour le sous admin
+    @PutMapping("/Reset/{id}")
+    public void Reset(@PathVariable String id ){
+        caisseService.Reset(id);
+    }
+    @PutMapping("/Etat/{id}")
+    public void Update(@PathVariable String id ){
+        caisseService.UpdateEtat(id);
+    }
+
+    @GetMapping("/todaySales")
+    public int todaySles(){
+        return caisseService.todaysales();
+    }
+
+    // for admin
+    @GetMapping("/totalSales")
+    public Double totalSales(){
+        return caisseService.totalsales();
+    }
+
+    //todayAdmin revenu
+    @GetMapping("/AdminRevenu")
+    public Double AdminRe(){
+        return caisseService.adminRevenu();
+    }
+
+    //total revenu
+    @GetMapping("/AdminTotalRevenu")
+    public Double AdminRevenuetotal(){return caisseService.AdmeinRedvenuTotal();}
+
+    @GetMapping("/totalFrais/{idDelivery}")
+    public double totalFrais(@PathVariable String idDelivery){return caisseService.fraisTotal(idDelivery);}
+
+    @GetMapping("/commission/{totalFrais}")
+    public double commission(@PathVariable double totalFrais){return caisseService.comissionFrais(totalFrais);}
 }
+

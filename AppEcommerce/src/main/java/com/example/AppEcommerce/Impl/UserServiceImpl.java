@@ -1,9 +1,6 @@
 package com.example.AppEcommerce.Impl;
 
-import com.example.AppEcommerce.Dto.SignUpAdmin;
-import com.example.AppEcommerce.Dto.SignUpDelivery;
-import com.example.AppEcommerce.Dto.SignUpUser;
-import com.example.AppEcommerce.Dto.editLongLatDelivery;
+import com.example.AppEcommerce.Dto.*;
 import com.example.AppEcommerce.Model.BenifitsVendor;
 import com.example.AppEcommerce.Model.Pages;
 import com.example.AppEcommerce.Model.RevenueDate;
@@ -38,7 +35,11 @@ public interface UserServiceImpl   {
     String editLongLatDelivery(editLongLatDelivery longLatDelivery);
 
 
-    ResponseEntity<?> addImagesToUser(String id, MultipartFile fileProfile)throws IOException;
+  double SetSoldDelivery(double Commission, SignUpDelivery signUpDelivery);
+
+  String editLongLatUser(editLongLatUser longLatUser);
+
+  ResponseEntity<?> addImagesToUser(String id, MultipartFile fileProfile)throws IOException;
 
     RevenueDate todayRevenue(String id);
 

@@ -3,6 +3,7 @@ package com.example.AppEcommerce.Controller;
 import com.example.AppEcommerce.Dto.SignUpDelivery;
 import com.example.AppEcommerce.Dto.SignUpUser;
 import com.example.AppEcommerce.Dto.editLongLatDelivery;
+import com.example.AppEcommerce.Dto.editLongLatUser;
 import com.example.AppEcommerce.Enum.Role;
 import com.example.AppEcommerce.Model.BenifitsVendor;
 import com.example.AppEcommerce.Model.Pages;
@@ -65,6 +66,15 @@ public class UserController {
     @PutMapping("/editDeliveryLatLong")
     public String editLongLatDelivery(@RequestBody editLongLatDelivery longLatDelivery) {
         return userService.editLongLatDelivery(longLatDelivery);
+    }
+
+    @PostMapping("/setSold")
+    public double setSoldDelivery(@RequestParam double commission, @RequestBody SignUpDelivery signUpDelivery) {
+        return userService.SetSoldDelivery(commission, signUpDelivery);
+    }
+    @PutMapping("/editUserLatLong")
+    public String editLongLatUser(@RequestBody editLongLatUser longLatUser) {
+        return userService.editLongLatUser(longLatUser);
     }
     @PostMapping("/addImagesToUser/{id}")
     public ResponseEntity<?> addImagesToUser(@RequestPart(name = "imageProfile", required = false) MultipartFile fileProfile,@PathVariable String id) throws IOException {

@@ -2,11 +2,13 @@ package com.example.AppEcommerce.Service;
 
 import com.example.AppEcommerce.Dto.CaisseDto;
 import com.example.AppEcommerce.Dto.getArticleCaisseDto;
+import com.example.AppEcommerce.Enum.Role;
 import com.example.AppEcommerce.Enum.Status;
 import com.example.AppEcommerce.Impl.CaisseServiceImp;
 import com.example.AppEcommerce.Model.*;
 
 import com.example.AppEcommerce.Repository.*;
+import com.google.common.util.concurrent.AtomicDouble;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,9 @@ public class CaisseService implements CaisseServiceImp {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PagesRepository pageRepository;
     @Autowired
     private ArticleRepository articleRepository;
     @Autowired
@@ -169,10 +174,7 @@ public class CaisseService implements CaisseServiceImp {
         }
     }
 
-    @Override
-    public void SetSold(String idCaisse) {
 
-    }
 
     @Override
     public LocalDate getDateByIdCaisse(String idCaisse) {
@@ -323,13 +325,14 @@ public class CaisseService implements CaisseServiceImp {
                     }
                     double newChiffre = benifitsVendor.getChiffre() + caisse.getSubTotal();
                     benifitsVendor.setChiffre(newChiffre);
-                    int newFrais = benifitsVendor.getFrais() + 1;
+                    double newFrais = newChiffre * 0.1;
+                    double newSold = user.getSold() - newFrais;
                     benifitsVendor.setFrais(newFrais);
-                    int newBenefits = (int) (newChiffre - newFrais);
+                   user.setSold(newSold);
+                   double newBenefits = (newChiffre - newFrais);
                     benifitsVendor.setBenefits(newBenefits);
                 }
             }
-
             benifitsVendorRepository.saveAll(benifitsVendorMap.values());
             user.getBenifitsVendors().addAll(benifitsVendorMap.values());
             userRepository.save(user);
@@ -340,13 +343,10 @@ public class CaisseService implements CaisseServiceImp {
         double totalRevenue = 0;
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + id));
-
         List<BenifitsVendor> benifitsVendors = user.getBenifitsVendors();
-
         for (BenifitsVendor benifitsVendor : benifitsVendors) {
             totalRevenue += benifitsVendor.getChiffre();
         }
-
         return totalRevenue;
     }
 
@@ -376,7 +376,6 @@ public class CaisseService implements CaisseServiceImp {
 
         return totalbenifits;
     }
-
     @Override
     public List<User> getListClientByVendor(String id) {
         List<Caisse> caisses = caisseRepository.findByidVendor(id);
@@ -417,31 +416,283 @@ public class CaisseService implements CaisseServiceImp {
         throw new NoSuchElementException("ArticleCaisse not found with ID " + idArticle);
     }
     @Override
-    public Map<String, List<String>> regrouperAvisParArticle() {
-        Map<String, List<String>> avisParArticle = new HashMap<>();
+    public List<String> getAvisParArticle(String idArticle) {
         List<Caisse> caisses = caisseRepository.findAll();
+        List<String> avisList = new ArrayList<>();
+
         for (Caisse caisse : caisses) {
             if (caisse.getStatus() == Status.DELIVERED) {
                 List<ArticleCaisse> articles = caisse.getArticles();
-                for (ArticleCaisse articleCaisse : articles) {
-                    String idArticle = articleCaisse.getIdArticle();
-                    String avis = articleCaisse.getAvis();
 
-                    if (avis != null) { // Exclude null values
-                        List<String> avisList = avisParArticle.getOrDefault(idArticle, new ArrayList<>());
-                        avisList.add(avis);
-                        avisParArticle.put(idArticle, avisList);
+                for (ArticleCaisse articleCaisse : articles) {
+                    if (articleCaisse.getIdArticle().equals(idArticle)) {
+                        String avis = articleCaisse.getAvis();
+
+                        if (avis != null) {
+                            avisList.add(avis);
+                        }
                     }
                 }
             }
         }
 
-        return avisParArticle;
+        return avisList;
     }
 
 
-}
+    @Override
+  public double fraisDelivery(String idCaisse){
+        Caisse caisse = getCaisseById(idCaisse);
+        User client = userRepository.findById(caisse.getIdSender()).orElseThrow(() -> new NoSuchElementException("user not found with ID" + caisse.getIdSender()));
+        double clientLat = client.getLatitude();
+        double clientLong = client.getLongitude();
+        List<ArticleCaisse> articleCaisse = caisse.getArticles();
+        Optional<Article> article = articleRepository.findById(String.valueOf(articleCaisse.get(0)));
+        Pages page = pageRepository.findById(article.get().getPage().getId()).orElseThrow(() -> new NoSuchElementException("page not found with ID" + article.get().getPage().getId()));
+        double pageLat = page.getLatitude();
+        double pageLong = page.getLongitude();
+        double frais = 0.0;
+        // Calculating the distance between client and page using the Haversine formula
+        double distance = calculateDistance(clientLat, clientLong, pageLat, pageLong);
 
+        // Calculating the frais based on the distance
+        if (distance <= 7) {
+            frais = distance * 1; // Add 1d for each kilometer
+        }
+        return frais;
+    }
+   @Override
+   public double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        // Radius of the Earth in kilometers
+        double earthRadius = 6371;
+
+        // Convert latitude and longitude to radians
+        double lat1Rad = Math.toRadians(lat1);
+        double lon1Rad = Math.toRadians(lon1);
+        double lat2Rad = Math.toRadians(lat2);
+        double lon2Rad = Math.toRadians(lon2);
+
+        // Calculate the differences between the latitudes and longitudes
+        double latDiff = lat2Rad - lat1Rad;
+        double lonDiff = lon2Rad - lon1Rad;
+
+        // Calculate the distance using the Haversine formula
+        double a = Math.pow(Math.sin(latDiff / 2), 2) + Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.pow(Math.sin(lonDiff / 2), 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = earthRadius * c;
+
+        return distance;
+    }
+    public double fraisTotal(String idDelivery){
+        List<Caisse> caisses = caisseRepository.findByidDelivery(idDelivery);
+        List<Caisse> caissesDelivered = new ArrayList<>();
+        caisses.forEach(caisse -> {
+            if(caisse.getStatus().equals(Status.DELIVERED)){
+                caissesDelivered.add(caisse);
+            }
+        });
+        AtomicDouble totalFrais = new AtomicDouble(0.0); // Use AtomicDouble instead of double
+
+        caissesDelivered.forEach(caisse -> {
+            double frais = fraisDelivery(caisse.getId());
+            totalFrais.addAndGet(frais); // Update the AtomicDouble using atomic operation
+        });
+
+        return totalFrais.get();
+    }
+    public double comissionFrais(double totalFrais){
+        double commission = totalFrais * 0.1; // Calculate 10% of fraisTotal
+        return commission;
+    }
+
+
+
+    //Admin-------------------------------------------------------------------------------------------------------------------------------
+
+    //update solde pour sous admin
+    @Override
+    public void UpdateSoldeSousAdmin(String id, String id2, int i){
+        User u=userRepository.findById(id).orElseThrow();
+        User u2=userRepository.findById(id2).orElseThrow();
+        u.setSold(i+u.getSold());
+        //Pour charger tous les soldes ajouter pour le sous admin
+        u2.setCompteurC(u2.getCompteurC()+i);
+        u2.setT(u2.getT()+i*0.1);
+        userRepository.save(u);
+        userRepository.save(u2);
+
+    }
+    //update solde pour sous admin (carger le page)
+    @Override
+    public void PageUpdateSolde(String id, String id2, int i){
+        User u=userService.getUserByPage(id);
+        User u2=userRepository.findById(id2).orElseThrow();
+        if(u!=null){
+            u.setSold(i+u.getSold());
+            //Pour charger tous les soldes ajouter pour le sous admin
+            u2.setCompteurC(u2.getCompteurC()+i);
+            u2.setT(u2.getT()+i*0.1);
+            userRepository.save(u);
+            userRepository.save(u2);}
+
+    }
+    //reset sous admin
+    @Override
+    public void Reset(String id){
+        User u=userRepository.findById(id).orElseThrow();
+        u.setCompteurC(0);
+        userRepository.save(u);
+    }
+    @Override
+    public void UpdateEtat(String id){
+        User u=userRepository.findById(id).orElseThrow();
+        u.setEtat(false);
+        userRepository.save(u);
+    }
+    @Override
+    public int todaysales() {
+        List<Caisse> c= caisseRepository.findAll();
+        int revenue=0;
+        int prix=0;
+        RevenueDate revenueDate = null;
+        List<ArticleCaisse> articleCaisses = null;
+
+        for (Caisse cc: c) {
+            if (cc.getDate() != null) {
+                if (cc.getStatus() == Status.DELIVERED && cc.getDate().equals(LocalDate.now())) {
+                    for (ArticleCaisse article : cc.getArticles()) {
+
+                        prix = Integer.parseInt(article.getPrix());
+                        int i = prix * article.getQnt();
+                        int revenu = i;
+                        revenue += revenu;
+
+
+                    }
+
+                }
+            }
+            else {return 0;}
+        }
+
+
+        return revenue;
+    }
+    //total sales
+    @Override
+    public Double totalsales() {
+        List<Caisse> c = caisseRepository.findAll();
+        double revenue = 0;
+        double prix = 0;
+        for (Caisse cc : c) {
+
+            if (cc.getStatus() == Status.DELIVERED ){
+
+                for (ArticleCaisse article : cc.getArticles()) {
+                    prix = Double.parseDouble(article.getPrix());
+
+                    revenue += prix * article.getQnt();
+
+                }
+            }
+        }
+        return revenue;
+    }
+    @Override
+    public int SalesARTToday() {
+        List<Caisse> c= caisseRepository.findAll();
+        int i=0;
+        List<ArticleCaisse> articleCaisses = null;
+        for (Caisse cc: c) {
+            if (cc.getDate() != null) {
+                if (cc.getStatus() == Status.DELIVERED && cc.getDate().equals(LocalDate.now())) {
+
+                    for (ArticleCaisse article : cc.getArticles()) {
+
+                        i = i + article.getQnt();
+
+                    }
+                }
+            }
+        }
+        return i;
+    }
+    @Override
+    public int SalesART() {
+        List<Caisse> c= caisseRepository.findAll();
+        int i=0;
+        List<ArticleCaisse> articleCaisses = null;
+        for (Caisse cc: c) {
+            if (cc.getStatus() == Status.DELIVERED ) {
+                for (ArticleCaisse article : cc.getArticles()) {
+                    i  = i + article.getQnt();
+
+                }
+            }
+        }
+        return i;
+    }
+    @Override
+    public int revenuLivreurT() {
+        List<User> users = userRepository.findAll();
+        RevenueDate todayRevenue = null;
+        int revenue=0;
+        int i=0;
+
+        for (User u : users) {
+            if (u.getRole()== Role.DELIVERY) {
+
+
+                for (RevenueDate revenueDate : u.getRevenueDates()) {
+                    if  (revenueDate.getDate()!=null) {
+                        if (revenueDate.getDate().equals(LocalDate.now())) {
+                            revenue += revenueDate.getRevenue();
+                            i++;
+                        }
+                    }
+                }
+
+            }
+
+        }
+        return  i;
+    }
+
+    //nbre de livraison total
+    @Override
+    public int revenuLivreur() {
+        List<User> users = userRepository.findAll();
+        int i=0;
+        for (User u : users) {
+            if (u.getRole()== Role.DELIVERY) {
+                if (u.getRevenueDates() != null) {
+                    for (RevenueDate revenueDate : u.getRevenueDates()) {
+                        i++;
+                    }
+
+                }
+            }
+
+        }
+        return  i;
+    }
+    //revenu admin today
+    @Override
+    public double adminRevenu(){
+        double somme=0;
+        somme=SalesARTToday()*1000+revenuLivreurT()*500;
+        return somme;
+    }
+    //revenu total du admin
+
+
+    @Override
+    public double AdmeinRedvenuTotal(){
+        double somme=0;
+        somme=SalesART()*1000+revenuLivreur()*500;
+        return somme;
+    }
+}
 
 
 
