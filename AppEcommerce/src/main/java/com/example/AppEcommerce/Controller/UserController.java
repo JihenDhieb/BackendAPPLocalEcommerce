@@ -68,10 +68,7 @@ public class UserController {
         return userService.editLongLatDelivery(longLatDelivery);
     }
 
-    @PostMapping("/setSold")
-    public double setSoldDelivery(@RequestParam double commission, @RequestBody SignUpDelivery signUpDelivery) {
-        return userService.SetSoldDelivery(commission, signUpDelivery);
-    }
+
     @PutMapping("/editUserLatLong")
     public String editLongLatUser(@RequestBody editLongLatUser longLatUser) {
         return userService.editLongLatUser(longLatUser);
@@ -88,12 +85,29 @@ public class UserController {
     @GetMapping("/weekRevenue/{id}")
     public List<RevenueDate> weekRevenue(@PathVariable("id") String id) {
         return userService.weekRevenue(id);
-    }
-
-    @GetMapping("/monthRevenue/{id}")
+    }@GetMapping("/monthRevenue/{id}")
     public List<RevenueDate> monthRevenue(@PathVariable("id") String id) {
         return userService.monthRevenue(id);
     }
+    @GetMapping("/email/{email}")
+    public User getUserByemail(@PathVariable("email") String email) {
+        return userRepository.findUserByEmail(email);
+
+    }
+    @GetMapping("/listeUser")
+    public List<User> getUser() {
+        return userRepository.findAll();
+
+    }
+    @GetMapping("/Admins")
+    public List<User> Admin(){
+        return userService.AdminUsers();
+    }
+    @GetMapping("/Livreurs")
+    public List<User> livreur(){
+        return userService.Livreurs();
+    }
+
     @GetMapping("/todayRevenuevendor/{id}")
     public BenifitsVendor todayRevenueVendor(@PathVariable("id") String id) {
         return userService.todayRevenueVendor(id);
@@ -105,6 +119,23 @@ public class UserController {
     @GetMapping("/monthRevenueVendor/{id}")
     public List<BenifitsVendor> monthRevenueVendor(@PathVariable("id") String id) {
         return userService.monthRevenueVendor(id);
+    }
+    //Admin Jihen*-------------------------------------------------------------------------------------------------------------
+    @GetMapping("/count")
+    public int countUsers() {
+        return userService.CountUsers();
+    }
+    @GetMapping("/countClient")
+    public int countClient() {
+        return userService.CountClient();
+    }
+    @GetMapping("/countDELIVERY")
+    public int countDELIVERY() {
+        return userService.CountDELIVERY();
+    }
+    @GetMapping("/countSousAdmin")
+    public int countSousAdmin() {
+        return userService.CountSousAdmin();
     }
 }
 

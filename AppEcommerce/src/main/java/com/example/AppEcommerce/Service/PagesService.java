@@ -3,14 +3,8 @@ package com.example.AppEcommerce.Service;
 import com.example.AppEcommerce.Dto.MessageResponse;
 import com.example.AppEcommerce.Dto.PagesDto;
 import com.example.AppEcommerce.Impl.PagesServiceImpl;
-import com.example.AppEcommerce.Model.Article;
-import com.example.AppEcommerce.Model.File;
-import com.example.AppEcommerce.Model.Pages;
-import com.example.AppEcommerce.Model.User;
-import com.example.AppEcommerce.Repository.ArticleRepository;
-import com.example.AppEcommerce.Repository.FileRepository;
-import com.example.AppEcommerce.Repository.PagesRepository;
-import com.example.AppEcommerce.Repository.UserRepository;
+import com.example.AppEcommerce.Model.*;
+import com.example.AppEcommerce.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -135,20 +129,40 @@ public class PagesService  implements PagesServiceImpl {
     public void modifyStatusPage(String id){
        Pages page = pagesRepository.findById(id) .orElseThrow(()-> new NoSuchElementException("page not found with ID"+id));
         page.setEnLigne(!page.isEnLigne());
-       pagesRepository.save(page);
+       Pages  page1 = pagesRepository.save(page);
+       List<Article> articles = articleRepository.findByPage(page);
+       articles.forEach(article -> {
+           article.setPage(page1);
+           articleRepository.save(article);
+       });
     }
-   @Override
-   public List<String> searchPageByTitle(String searchLetter) {
+    @Override
+    public List<String> searchPageByTitle(String searchLetter, String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + userId));
+
         List<Pages> pages = pagesRepository.findAll();
         List<String> matchingTitles = new ArrayList<>();
+
         for (Pages page : pages) {
             String title = page.getTitle();
             if (title.toLowerCase().contains(searchLetter.toLowerCase())) {
                 matchingTitles.add(title);
             }
         }
+
+        System.out.print(matchingTitles);
+
+        if (!matchingTitles.isEmpty()) {
+
+
+            List<String> historiqueRecherches = user.getHistoriquesRecherche();
+            historiqueRecherches.add(searchLetter);
+            user.setHistoriquesRecherche(historiqueRecherches);
+            userRepository.save(user);
+        }
+
         return matchingTitles;
     }
 
-
-    }
+}

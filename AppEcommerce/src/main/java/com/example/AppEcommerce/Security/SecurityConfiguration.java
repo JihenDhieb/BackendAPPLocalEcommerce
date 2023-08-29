@@ -13,6 +13,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 
 @Configuration
@@ -39,6 +42,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:4200");
+
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
 
     @Bean
     BCryptPasswordEncoder encoder() {
@@ -53,17 +68,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers( "/api/auth/**",
-                        "/User/**",
-                        "/pages/**",
-                        "/article/**",
-                        "/caisse/**",
-                        "/notification/**"
-                        ).permitAll()//7elet ilport mta3 il vendor bach maysirech erreur 401
+                .antMatchers("/api/auth/**", "/User/**", "/pages/**", "/article/**", "/caisse/**", "/notification/**").permitAll()
                 .anyRequest().authenticated();
 
-
         http.headers().frameOptions().disable();
-
     }
+
 }

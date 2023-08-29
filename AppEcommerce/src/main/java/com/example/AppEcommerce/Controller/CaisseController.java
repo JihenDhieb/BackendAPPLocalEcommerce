@@ -29,6 +29,10 @@ public class CaisseController {
     @Autowired
     NotificationService notificationService;
     CaisseRepository caisseRepository;
+    @Autowired
+    public CaisseController(CaisseRepository caisseRepository) {
+        this.caisseRepository = caisseRepository;
+    }
 
     @PostMapping(value = "/add")
     public String addCaisse(@RequestBody CaisseDto caisseDto) throws FirebaseMessagingException {
@@ -89,7 +93,7 @@ public class CaisseController {
     }
     @GetMapping(value = "/SetStatutdelivred/{id}")
     public void SetStatutdelivred(@PathVariable String id) throws FirebaseMessagingException {
-        caisseService.SetStatutdelivred(id);
+        caisseService.setStatutDelivered(id);
     }
     @GetMapping("/{idCaisse}/date")
     public ResponseEntity<LocalDate> getCaisseDateById(@PathVariable String idCaisse) {
@@ -130,7 +134,7 @@ public class CaisseController {
     }
 
     @GetMapping("/{id}/revenue/total")
-    public int calculateTotalRevenueForCaisse(@PathVariable("id") String caisseId) {
+    public double  calculateTotalRevenueForCaisse(@PathVariable("id") String caisseId) {
         return caisseService.calculateTotalRevenueForAllCaisse(caisseId);
     }
 
@@ -140,17 +144,11 @@ public class CaisseController {
     }
 
 
-   @PostMapping("/benefits/{id}")
-   public ResponseEntity<String> calculateBenefits(@PathVariable String id) {
-       try {
-           caisseService.benefitsVendor(id);
-           return ResponseEntity.ok("Benefits calculation successful.");
-       } catch (NoSuchElementException e) {
-           return ResponseEntity.notFound().build();
-       } catch (Exception e) {
-           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during benefits calculation.");
-       }
-   }
+    @GetMapping("/calculateBenefitsVendor/{userId}")
+    public ResponseEntity<String> calculateBenefitsVendor(@PathVariable String userId) {
+       caisseService.benefitsVendor(userId);
+        return ResponseEntity.ok("Calcul des bénéfices pour le vendeur effectué avec succès.");
+    }
     @GetMapping("/{vendorId}/totalchiffre")
     public double totalchiffre(@PathVariable String vendorId) {
         return caisseService.calculateTotalRevenue(vendorId);
@@ -200,9 +198,25 @@ public class CaisseController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
-    //ADMIN ----------------------------------------------------------------------------------------------
+    @GetMapping("/totalFrais/{idDelivery}")
+    public double totalFrais(@PathVariable String idDelivery){return caisseService.fraisTotal(idDelivery);}
+    @GetMapping("/commission/{totalFrais}")
+    public double commission(@PathVariable double totalFrais){return caisseService.comissionFrais(totalFrais);}
+    @GetMapping("/commission1/{userId}")
+    public ResponseEntity<Double> getCommissionAndFrais(@PathVariable String userId) {
+        try {
+            double totalCommissionAndFrais = caisseService.calculateTotalCommissionAndFrais(userId);
+            return ResponseEntity.ok(totalCommissionAndFrais);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/list-pages-by-commande/{id}")
+    public ResponseEntity<List<String>> getListPageParCommande(@PathVariable String id) {
+        List<String> titles = caisseService.getListPageParCommande(id);
+        return new ResponseEntity<>(titles, HttpStatus.OK);
+    }
+    //ADMIN ------------------------------------------------------------------------------------------------------------
     @GetMapping("/getAll")
     public List<Caisse> getList() {
         return caisseRepository.findAll();
@@ -225,32 +239,24 @@ public class CaisseController {
     public void Update(@PathVariable String id ){
         caisseService.UpdateEtat(id);
     }
-
     @GetMapping("/todaySales")
     public int todaySles(){
         return caisseService.todaysales();
     }
-
     // for admin
     @GetMapping("/totalSales")
     public Double totalSales(){
         return caisseService.totalsales();
     }
-
     //todayAdmin revenu
     @GetMapping("/AdminRevenu")
     public Double AdminRe(){
         return caisseService.adminRevenu();
     }
-
     //total revenu
     @GetMapping("/AdminTotalRevenu")
     public Double AdminRevenuetotal(){return caisseService.AdmeinRedvenuTotal();}
 
-    @GetMapping("/totalFrais/{idDelivery}")
-    public double totalFrais(@PathVariable String idDelivery){return caisseService.fraisTotal(idDelivery);}
 
-    @GetMapping("/commission/{totalFrais}")
-    public double commission(@PathVariable double totalFrais){return caisseService.comissionFrais(totalFrais);}
 }
 

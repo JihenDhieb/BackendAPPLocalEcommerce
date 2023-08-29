@@ -40,10 +40,8 @@ public interface CaisseServiceImp {
 
     void SetStatutBeingdelivred(String idCaisse);
 
-    void SetStatutdelivred(String idCaisse);
 
-
-
+    double calculateTotalCommissionAndFrais(String userId);
 
     LocalDate getDateByIdCaisse(String idCaisse);
 
@@ -58,7 +56,7 @@ public interface CaisseServiceImp {
 
     int getNbCaisseForVendor(String id);
 
-    int calculateTotalRevenueForAllCaisse(String id);
+    double  calculateTotalRevenueForAllCaisse(String id);
 
 
 
@@ -69,7 +67,7 @@ public interface CaisseServiceImp {
     int countClients(String id);
 
  
-    void benefitsVendor(String id);
+
 
     List<User> getListClientByVendor(String id);
 
@@ -81,11 +79,16 @@ public interface CaisseServiceImp {
 
     List<String> getAvisParArticle(String idArticle);
 
+
+    void setStatutDelivered(String idCaisse);
+
     double fraisDelivery(String idCaisse);
 
     double calculateDistance(double lat1, double lon1, double lat2, double lon2);
 
     //Admin
+
+    List<String> getListPageParCommande(String id);
 
     //update solde pour sous admin
     void UpdateSoldeSousAdmin(String id, String id2, int i);

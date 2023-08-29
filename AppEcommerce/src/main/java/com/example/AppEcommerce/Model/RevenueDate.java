@@ -6,19 +6,19 @@ import java.time.LocalDate;
 
 public class RevenueDate {
     String id;
-    int revenue;
+   double revenue;
     LocalDate date;
 
-    public RevenueDate(int revenue, LocalDate date) {
+    public RevenueDate(double revenue, LocalDate date) {
         this.revenue = revenue;
         this.date = date;
     }
 
-    public int getRevenue() {
+    public double getRevenue() {
         return revenue;
     }
 
-    public void setRevenue(int revenue) {
+    public void setRevenue(double revenue) {
         this.revenue = revenue;
     }
 

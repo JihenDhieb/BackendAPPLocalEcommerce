@@ -59,8 +59,8 @@ public class PagesController {
         pagesService.modifyStatusPage(id);
     }
     @GetMapping("/search")
-    public List<String> searchPageByTitle(@RequestParam("letter") String searchLetter) {
-        return pagesService.searchPageByTitle(searchLetter);
+    public List<String> searchPageByTitle(@RequestParam("letter") String searchLetter,String id) {
+        return pagesService.searchPageByTitle(searchLetter,id);
     }
     @GetMapping(value="/findAllPages")
     public List<Pages> findAllP(){

@@ -1,10 +1,9 @@
 package com.example.AppEcommerce.Enum;
 
 public enum Status {
-    CANCEL,
+    ANNULE,
+    EN_PREPARATION,
 
-    IN_PREPARATION,
-
-    BEING_DELIVERED,
-    DELIVERED
+    EN_COURS_DE_LIVRAISON,
+    LIVRE
 }

@@ -33,6 +33,5 @@ public interface PagesServiceImpl {
 
     void modifyStatusPage(String id);
 
-
-    List<String> searchPageByTitle(String searchLetter);
+    List<String> searchPageByTitle(String searchLetter, String userId);
 }

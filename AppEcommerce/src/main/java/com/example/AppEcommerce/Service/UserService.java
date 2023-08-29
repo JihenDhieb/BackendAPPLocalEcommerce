@@ -1,6 +1,7 @@
 package com.example.AppEcommerce.Service;
 
 import com.example.AppEcommerce.Dto.*;
+import com.example.AppEcommerce.Enum.Role;
 import com.example.AppEcommerce.Impl.UserServiceImpl;
 import com.example.AppEcommerce.Model.*;
 import com.example.AppEcommerce.Repository.CaisseRepository;
@@ -138,15 +139,7 @@ public class UserService implements UserServiceImpl {
         User userUpdated = userRepository.save(user);
         return userUpdated.getId();
     }
-    @Override
-    public double SetSoldDelivery(double Commission, SignUpDelivery signUpDelivery){
-        User delivery = getUserById(signUpDelivery.getId());
-        double solde1=0.0;
-        solde1 = delivery.getSold() - Commission;
-        delivery.setSold(solde1);
-        User client1=userRepository.save(delivery);
-        return solde1;
-    }
+
     @Override
     public String editLongLatUser(editLongLatUser longLatUser){
         User user = getUserById(longLatUser.getId());
@@ -183,14 +176,13 @@ public class UserService implements UserServiceImpl {
         List<RevenueDate> weekRevenue = new ArrayList<>();
         List<RevenueDate> revenues = user.getRevenueDates();
         LocalDate currentDate = LocalDate.now();
-
         for (int i = 0; i < 7; i++) {
             LocalDate targetDate = currentDate.minusDays(i);
-
             for (RevenueDate revenueDate : revenues) {
                 if (revenueDate.getDate().equals(targetDate)) {
                     weekRevenue.add(revenueDate);
-                    break; // Found the revenue for the target date, no need to continue searching
+                    break;
+                    // Found the revenue for the target date, no need to continue searching
                 }
             }
         }
@@ -226,7 +218,31 @@ public class UserService implements UserServiceImpl {
         }
         return todayBenifitsVendor;
     }
+    @Override
+    public List<User> Livreurs() {
+        List<User> u=userRepository.findAll();
+        List<User> livreur=new ArrayList<>();
+        for(User uu:u){
+            if (uu.getRole()== Role.DELIVERY){
+                livreur.add(uu);
 
+            }
+        }
+
+        return livreur;
+
+    }
+    @Override
+    public List<User> AdminUsers() {
+        List<User> u=userRepository.findAll();
+        List<User> admin=new ArrayList<>();
+        for(User uu:u){
+            if (uu.getRole()== Role.ADMIN){
+                admin.add(uu);
+            }
+        }
+        return admin;
+    }
     @Override
     public List<BenifitsVendor> weekRevenueVendor(String id) {
         User user = getUserById(id);
@@ -263,6 +279,56 @@ public class UserService implements UserServiceImpl {
 
         return monthRevenue;
     }
+
+
+//Admin Jihen
+    //Nombre de all Users
+@Override
+public int CountUsers() {
+    List<User> users = userRepository.findAll();
+    int count = 0;
+
+    if (users != null) {
+        count = users.size();
+    }
+
+    return count;
 }
+//Nombre des AllClient
+@Override
+public int CountClient() {
+    List<User> users = userRepository.findAll();
+    int count =0;
+    for(User user : users){
+        if (user.getRole() == Role.CLIENT) {
+            count++;
+        }
 
-
+    }
+    return count;
+}
+//Nombre des AllDelivery
+@Override
+public int CountDELIVERY() {
+    List<User> users = userRepository.findAll();
+    int count =0;
+    for(User user : users){
+        if (user.getRole() == Role.DELIVERY) {
+            count++;
+        }
+    }
+    return count;
+}
+    //Nombre des AllDelivery
+    @Override
+    public int CountSousAdmin() {
+        List<User> users = userRepository.findAll();
+        int count =0;
+        for(User user : users){
+            if (user.getRole() == Role.SOUS_ADMIN) {
+                count++;
+            }
+        }
+        return count;
+    }
+}

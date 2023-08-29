@@ -30,12 +30,12 @@ public interface UserServiceImpl   {
 
     void modifyStatusDelivery(String id);
 
-    String editDelivery(SignUpDelivery signUpDelivery);
+  abstract String editDelivery(SignUpDelivery signUpDelivery);
 
     String editLongLatDelivery(editLongLatDelivery longLatDelivery);
 
 
-  double SetSoldDelivery(double Commission, SignUpDelivery signUpDelivery);
+
 
   String editLongLatUser(editLongLatUser longLatUser);
 
@@ -50,7 +50,22 @@ public interface UserServiceImpl   {
 
     BenifitsVendor todayRevenueVendor(String id);
 
+    List<User> Livreurs();
+
+    List<User> AdminUsers();
+
     List<BenifitsVendor> weekRevenueVendor(String id);
 
     List<BenifitsVendor> monthRevenueVendor(String id);
+    //Admin Jihen
+    int CountUsers();
+
+  //Nombre des AllClient
+  int CountClient();
+
+  //Nombre des AllDelivery
+  int CountDELIVERY();
+
+  //Nombre des AllDelivery
+  int CountSousAdmin();
 }

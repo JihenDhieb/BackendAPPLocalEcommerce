@@ -81,9 +81,9 @@ public class NotificationService {
         User user = userRepository.findById(caisse.getIdVendor())
                 .orElseThrow(()-> new NoSuchElementException("user not found with ID"+ caisse.getIdVendor()));
         List<Device> devices = devices(user.getId());
-        AtomicReference<String> body = new AtomicReference<>("You have received a new order ");
+        AtomicReference<String> body = new AtomicReference<>("Vous avez reçu une nouvelle commande  ");
 
-     Notif notif = new Notif("New Order", body.get(), caisse.getId());
+     Notif notif = new Notif("Nouvelle Commande ", body.get(), caisse.getId());
         Notif savedNotif = notificationRepository.save(notif);
         FirebaseMessaging messaging = FirebaseMessaging.getInstance();
         Notification notification = Notification.builder()
@@ -95,10 +95,11 @@ public class NotificationService {
         if(devices.size() > 0) {
             devices.forEach(d -> {
                 try {
-
+                    String value = "Commande";
                     Message message = Message.builder()
                             .setNotification(notification)
                             .putAllData(data)
+                            .putData("Value", value)
                             .setToken(d.getToken())
                             .build();
                     messaging.send(message);
@@ -122,7 +123,7 @@ public class NotificationService {
 
         List<User> deliveriesWithSold = new ArrayList<>();
         deliveries.forEach(del ->{
-            if(del.getSold() > 0 && del.isEnLigne()){
+            if( del.isEnLigne()){
                 deliveriesWithSold.add(del);
             }
         });
@@ -136,8 +137,8 @@ public class NotificationService {
             deliveriesIds.add(delivery.getId());
         });
         List<Device> devices =findAllByUserIdIn(deliveriesIds);
-        AtomicReference<String> body = new AtomicReference<>("You have received a new delivery ");
-        Notif notif = new Notif("New Delivery", body.get(), caisse.getId());
+        AtomicReference<String> body = new AtomicReference<>("Vous avez reçu une nouvelle livraison ");
+        Notif notif = new Notif(" Nouvelle Livraison", body.get(), caisse.getId());
         Notif savedNotif = notificationRepository.save(notif);
         FirebaseMessaging messaging = FirebaseMessaging.getInstance();
         Notification notification = Notification.builder()
@@ -149,9 +150,11 @@ public class NotificationService {
         if(devices.size() > 0) {
             devices.forEach(d -> {
                 try {
+                    String value = "Commande";
                     Message message = Message.builder()
                             .setNotification(notification)
                             .putAllData(data)
+                            .putData("Value", value)
                             .setToken(d.getToken())
                             .build();
                     messaging.send(message);
@@ -170,9 +173,9 @@ public class NotificationService {
         User user = userRepository.findById(caisse.getIdVendor())
                 .orElseThrow(()-> new NoSuchElementException("user not found with ID"+ caisse.getIdVendor()));
         List<Device> devices = devices(user.getId());
-        AtomicReference<String> body = new AtomicReference<>("Delivery guy is coming For order: " + caisse.getReference());
+        AtomicReference<String> body = new AtomicReference<>("Le livreur arrive pour la commande: " + caisse.getReference());
 
-        Notif notif = new Notif("Delivery coming", body.get(), caisse.getId());
+        Notif notif = new Notif("Le livreur est en train d'arriver", body.get(), caisse.getId());
         Notif savedNotif = notificationRepository.save(notif);
         FirebaseMessaging messaging = FirebaseMessaging.getInstance();
         Notification notification = Notification.builder()
@@ -184,10 +187,11 @@ public class NotificationService {
         if(devices.size() > 0) {
             devices.forEach(d -> {
                 try {
-
+                    String value = "Commande";
                     Message message = Message.builder()
                             .setNotification(notification)
                             .putAllData(data)
+                            .putData("Value", value)
                             .setToken(d.getToken())
                             .build();
                     messaging.send(message);
@@ -206,9 +210,9 @@ public class NotificationService {
                 .orElseThrow(()-> new NoSuchElementException("user not found with ID"+ caisse.getIdDelivery()));
         List<Device> devices = devices(user.getId());
 
-        AtomicReference<String> body = new AtomicReference<>("The order with reference: " + caisse.getReference() + " has being canceled");
+        AtomicReference<String> body = new AtomicReference<>("La commande avec la réference : " + caisse.getReference() + " a été annulée par le vendeur.");
 
-        Notif notif = new Notif("Order Cancel", body.get(), caisse.getId());
+        Notif notif = new Notif("Commande Annulée", body.get(), caisse.getId());
         Notif savedNotif = notificationRepository.save(notif);
         FirebaseMessaging messaging = FirebaseMessaging.getInstance();
         Notification notification = Notification.builder()
@@ -244,9 +248,9 @@ public class NotificationService {
         User vendor = userRepository.findById(caisse.getIdVendor())
                 .orElseThrow(()-> new NoSuchElementException("user not found with ID"+ caisse.getIdVendor()));
         Set<String> usersIds = new HashSet<>();
-        AtomicReference<String> body = new AtomicReference<>("The order with reference: " + caisse.getReference() + " has being canceled by client");
+        AtomicReference<String> body = new AtomicReference<>("la commande avec reference  " + caisse.getReference() + " a été annulée par le client ");
 
-        Notif notif = new Notif("Order Cancel By Client", body.get(), caisse.getId());
+        Notif notif = new Notif("Commande annulée par le client", body.get(), caisse.getId());
         Notif savedNotif = notificationRepository.save(notif);
         FirebaseMessaging messaging = FirebaseMessaging.getInstance();
         Notification notification = Notification.builder()
@@ -266,10 +270,11 @@ public class NotificationService {
                 devices.forEach(d -> {
 
                     try {
-
+                        String value = "Commande";
                         Message message = Message.builder()
                                 .setNotification(notification)
                                 .putAllData(data)
+                                .putData("Value", value)
                                 .setToken(d.getToken())
                                 .build();
                         messaging.send(message);
@@ -288,10 +293,11 @@ public class NotificationService {
                 devices.forEach(d -> {
 
                     try {
-
+                        String value = "Commande";
                         Message message = Message.builder()
                                 .setNotification(notification)
                                 .putAllData(data)
+                                .putData("Value", value)
                                 .setToken(d.getToken())
                                 .build();
                         messaging.send(message);
@@ -313,7 +319,7 @@ public class NotificationService {
         Caisse lastDeliveredCaisse = null;
 
         for (Caisse caisse : caisses) {
-            if (caisse.getStatus() == Status.DELIVERED) {
+            if (caisse.getStatus() == Status.LIVRE) {
                 lastDeliveredCaisse = caisse;
             }
         }

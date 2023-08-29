@@ -23,8 +23,8 @@ public class Caisse {
     String description;
     String idVendor;
     Double subTotal;
-    String frais ;
-    Double totalPrice;
+
+
     List<ArticleCaisse> articles;
     String idDelivery;
     LocalDate date;
@@ -33,7 +33,7 @@ public class Caisse {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public Caisse(String idSender,String address,String streetAddress,String phone,String selectedTime,String description,String idVendor,Double subTotal,String frais,Double totalPrice, List<ArticleCaisse> articles, LocalDate date  ){
+    public Caisse(String idSender,String address,String streetAddress,String phone,String selectedTime,String description,String idVendor,Double subTotal, List<ArticleCaisse> articles, LocalDate date  ){
         this.idSender=idSender;
         this.address=address;
         this.streetAddress=streetAddress;
@@ -42,8 +42,7 @@ public class Caisse {
         this.description=description;
         this.idVendor=idVendor;
         this.subTotal=subTotal;
-        this.frais=frais;
-        this.totalPrice=totalPrice;
+
         this.articles = articles;
         this.date = date;
         this.reference = generateReference();
@@ -113,21 +112,9 @@ public class Caisse {
         this.subTotal = subTotal;
     }
 
-    public String getFrais() {
-        return frais;
-    }
 
-    public void setFrais(String frais) {
-        this.frais = frais;
-    }
 
-    public Double getTotalPrice() {
-        return totalPrice;
-    }
 
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
 
     public String getId() {
         return id;

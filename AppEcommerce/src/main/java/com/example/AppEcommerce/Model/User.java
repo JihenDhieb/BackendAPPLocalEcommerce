@@ -49,6 +49,9 @@ public class User {
             cascade = CascadeType.ALL,orphanRemoval = true)
     private List<BenifitsVendor> benifitsVendors =new ArrayList<>();
 
+
+
+
     public User(String email, String password, Role role, String firstName, String lastName,String phone,String ville) {
         this.email=email;
         this.password=password;
@@ -59,8 +62,17 @@ public class User {
         this.phone=phone;
 
     }
+private double commissiontotale;
 
+    public List<String> getHistoriquesRecherche() {
+        return historiquesRecherche;
+    }
 
+    public void setHistoriquesRecherche(List<String> historiquesRecherche) {
+        this.historiquesRecherche = historiquesRecherche;
+    }
+
+    private List<String> historiquesRecherche =new ArrayList<>();
     public List<BenifitsVendor> getBenifitsVendors() {
         return benifitsVendors;
     }
@@ -69,7 +81,7 @@ public class User {
         this.benifitsVendors = benifitsVendors;
     }
 
-    private double sold;
+
 
 
     private boolean enLigne;
@@ -122,13 +134,7 @@ public class User {
     }
 
 
-    public double  getSold() {
-        return sold;
-    }
 
-    public void setSold(double sold) {
-        this.sold = sold;
-    }
     public User(String email, String password, Role role, String firstName, String lastName,String phone){
         this.email=email;
         this.password=password;
@@ -139,14 +145,14 @@ public class User {
 
 
     }
-    public User(String email, String password, String firstName, String lastName, String phone, Role role,  int sold, boolean enLigne,double longitude, double latitude){
+    public User(String email, String password, String firstName, String lastName, String phone, Role role,  double commissiontotale, boolean enLigne,double longitude, double latitude){
         this.email=email;
         this.password=password;
         this.firstName=firstName;
         this.lastName=lastName;
         this.phone=phone;
         this.role=role;
-        this.sold = sold;
+        this.commissiontotale =commissiontotale;
         this.enLigne = enLigne;
         this.longitude = longitude;
         this.latitude = latitude;

@@ -16,9 +16,6 @@ import java.io.IOException;
 public class AuthController {
     @Autowired
     AuthService authService;
-
-
-
     @PostMapping("/registerAdmin")
     public ResponseEntity<?> registerAdmin(@Valid @RequestBody SignUpAdmin signUpAdmin){
         return authService.registerAdmin(signUpAdmin);
@@ -40,4 +37,5 @@ public class AuthController {
     public ResponseEntity<?> SousAd(@Valid @RequestBody SignUpSousAdmin signUpSousAdmin){
         return authService.registerSousAdmin(signUpSousAdmin);
     }
+
 }

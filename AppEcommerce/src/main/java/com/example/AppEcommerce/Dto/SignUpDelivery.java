@@ -28,7 +28,7 @@ public class SignUpDelivery {
     private String phone;
     private Role role;
     private int revenue;
-    private int sold;
+    private double commissiontotale;
     private boolean enLigne;
     private double longitude;
     private double latitude;
