@@ -32,7 +32,7 @@ public class PagesService  implements PagesServiceImpl {
     @Override
     public String  addPage(String idUser, PagesDto pagesDto) {
         User user = userRepository.findById(idUser).orElseThrow(null);
-        Pages pages  =new Pages(pagesDto.getTitle(),pagesDto.getAddress(),pagesDto.getEmail(),pagesDto.getPhone(),pagesDto.getPostalCode(),pagesDto.getActivity(),pagesDto.getRegion(),pagesDto.getLongitude(),pagesDto.getLatitude());
+        Pages pages  =new Pages(pagesDto.getTitle(),pagesDto.getAddress(),pagesDto.getEmail(),pagesDto.getPhone(),pagesDto.getPostalCode(),pagesDto.getActivity(),pagesDto.getRegion(),pagesDto.getLongitude(),pagesDto.getLatitude(),false,false);
         pagesRepository.save(pages);
         user.getPages().add(pages);
         userRepository.save(user);
@@ -128,11 +128,10 @@ public class PagesService  implements PagesServiceImpl {
     @Override
     public void modifyStatusPage(String id){
        Pages page = pagesRepository.findById(id) .orElseThrow(()-> new NoSuchElementException("page not found with ID"+id));
-        page.setEnLigne(!page.isEnLigne());
-       Pages  page1 = pagesRepository.save(page);
+        page.setEnligne(!page.isEnligne());
        List<Article> articles = articleRepository.findByPage(page);
        articles.forEach(article -> {
-           article.setPage(page1);
+           article.setPage(page);
            articleRepository.save(article);
        });
     }
@@ -164,5 +163,11 @@ public class PagesService  implements PagesServiceImpl {
 
         return matchingTitles;
     }
+    @Override
+    public void changerEtat(String id){
+        Pages page = pagesRepository.findById(id) .orElseThrow(()-> new NoSuchElementException("page not found with ID"+id));
+        page.setEtat(true);
+        pagesRepository.save(page);
 
+    }
 }

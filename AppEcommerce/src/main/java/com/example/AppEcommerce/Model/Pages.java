@@ -28,14 +28,23 @@ public class Pages {
     private double longitude;
 
     private double latitude;
-    private boolean enLigne;
+    private boolean etat;
 
-    public boolean isEnLigne() {
-        return enLigne;
+    public boolean isEtat() {
+        return etat;
     }
 
-    public void setEnLigne(boolean enLigne) {
-        this.enLigne = enLigne;
+    public void setEtat(boolean etat) {
+        this.etat = etat;
+    }
+    private boolean enligne;
+
+    public boolean isEnligne() {
+        return enligne;
+    }
+
+    public void setEnligne(boolean enligne) {
+        this.enligne = enligne;
     }
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -46,7 +55,7 @@ public class Pages {
     private File imageCouverture;
 
     public Pages(){}
-    public Pages(String title, String address, String email,String phone,String  postalCode, Activity activity,Region region, double longitude, double latitude) {
+    public Pages(String title, String address, String email,String phone,String  postalCode, Activity activity,Region region, double longitude, double latitude,boolean etat,boolean enligne) {
         this.title=title;
         this.address=address;
         this.phone=phone;
@@ -56,6 +65,8 @@ public class Pages {
         this.region=region;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.etat =etat;
+        this.enligne=enligne;
     }
 
     public String getTitle() {

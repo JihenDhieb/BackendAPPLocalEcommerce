@@ -73,6 +73,7 @@ public class UserController {
     public String editLongLatUser(@RequestBody editLongLatUser longLatUser) {
         return userService.editLongLatUser(longLatUser);
     }
+
     @PostMapping("/addImagesToUser/{id}")
     public ResponseEntity<?> addImagesToUser(@RequestPart(name = "imageProfile", required = false) MultipartFile fileProfile,@PathVariable String id) throws IOException {
         return userService.addImagesToUser(id, fileProfile);

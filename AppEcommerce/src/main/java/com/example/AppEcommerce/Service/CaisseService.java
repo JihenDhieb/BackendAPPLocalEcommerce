@@ -652,6 +652,18 @@ public class CaisseService implements CaisseServiceImp {
         userRepository.save(u);
     }
     @Override
+    public void payer(String id, String ids){
+        User u=userRepository.findById(id).orElseThrow();
+        User u2=userRepository.findById(ids).orElseThrow();
+
+        //Pour charger tous les soldes ajouter pour le sous admin
+        u2.setCompteurC(u2.getCompteurC()+u.getCommissiontotale());
+
+        u.setCommissiontotale(0);
+        userRepository.save(u);
+        userRepository.save(u2);
+    }
+    @Override
     public void UpdateEtat(String id){
         User u=userRepository.findById(id).orElseThrow();
         u.setEtat(false);

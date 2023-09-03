@@ -257,6 +257,9 @@ public class CaisseController {
     @GetMapping("/AdminTotalRevenu")
     public Double AdminRevenuetotal(){return caisseService.AdmeinRedvenuTotal();}
 
-
+    @PutMapping("/payer/{id}/{ids}")
+    public void payer(@PathVariable String id,@PathVariable String ids){
+        caisseService.payer(id,ids);
+    }
 }
 

@@ -99,6 +99,8 @@ public interface CaisseServiceImp {
     //reset sous admin
     void Reset(String id);
 
+    void payer(String id, String ids);
+
     //update etat
     void UpdateEtat(String id);
 

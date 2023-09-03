@@ -66,4 +66,8 @@ public class PagesController {
     public List<Pages> findAllP(){
         return pagesRepository.findAll();
     }
+    @PutMapping("/Etat/{id}")
+    public void Update(@PathVariable String id ){
+        pagesService.changerEtat(id);
+    }
 }

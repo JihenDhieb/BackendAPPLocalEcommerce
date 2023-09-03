@@ -31,5 +31,6 @@ public class PagesDto {
     private double longitude;
 
     private double latitude;
+    private boolean enligne;
 
 }
