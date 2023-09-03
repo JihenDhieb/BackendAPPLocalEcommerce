@@ -126,15 +126,24 @@ public class PagesService  implements PagesServiceImpl {
         }
     }
     @Override
-    public void modifyStatusPage(String id){
-       Pages page = pagesRepository.findById(id) .orElseThrow(()-> new NoSuchElementException("page not found with ID"+id));
-        page.setEnligne(!page.isEnligne());
-       List<Article> articles = articleRepository.findByPage(page);
-       articles.forEach(article -> {
-           article.setPage(page);
-           articleRepository.save(article);
-       });
+    public void modifyStatusPage(String id) {
+        Pages page = pagesRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Page not found with ID " + id));
+        List<Article> articles = articleRepository.findByPage(page);
+        boolean newStatus = !page.isEnligne();
+        page.setEnligne(newStatus);
+        pagesRepository.save(page);
+        for (Article article : articles) {
+            article.setPage(page);
+            articleRepository.save(article);// Set the new Page for each Article
+        }
     }
+
+
+
+
+
+
     @Override
     public List<String> searchPageByTitle(String searchLetter, String userId) {
         User user = userRepository.findById(userId)
