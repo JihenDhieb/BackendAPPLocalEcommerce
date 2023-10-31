@@ -13,7 +13,8 @@ import java.util.List;
 public interface ArticleServiceImpl {
     String  addArticle(String idPage, ArticleDto articleDto);
 
-    ResponseEntity<?> addImageToArticle(String id, MultipartFile file)throws IOException;
+
+    abstract ResponseEntity<?> addImageToArticle(String id, MultipartFile file)throws IOException;
 
     List<Article> findByPage(String id);
 

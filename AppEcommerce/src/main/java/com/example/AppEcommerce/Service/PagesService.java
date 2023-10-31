@@ -159,7 +159,7 @@ public class PagesService  implements PagesServiceImpl {
             }
         }
 
-        System.out.print(matchingTitles);
+
 
         if (!matchingTitles.isEmpty()) {
 

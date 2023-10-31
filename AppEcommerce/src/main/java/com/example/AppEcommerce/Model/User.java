@@ -35,6 +35,7 @@ public class User {
     private String lastName;
     private String phone;
     private boolean etat;
+    private List<History> productId;
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToMany(fetch = FetchType.LAZY,
