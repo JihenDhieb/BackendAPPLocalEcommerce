@@ -41,8 +41,9 @@ public class User {
     private String ville;
     private double compteurC;
     private double t;
+    private String identifiant;
 
-    private List<History> productId;
+    private List<History> productId = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToMany(fetch = FetchType.LAZY,
@@ -62,6 +63,10 @@ public class User {
     private File imageProfile;
 
     private List<String> historiquesRecherche =new ArrayList<>();
+
+    public boolean isPresent() {
+        return true;
+    }
 
 
     public User(String email, String password, Role role, String firstName, String lastName,String phone,String ville) {
@@ -148,8 +153,5 @@ public class User {
     }
 
 
-    public boolean isPresent() {
-        return true;
-    }
 
 }

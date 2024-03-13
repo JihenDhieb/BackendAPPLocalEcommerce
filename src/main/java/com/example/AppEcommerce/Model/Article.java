@@ -6,16 +6,12 @@ import javax.persistence.*;
 
 
 @Data
-
-
 public class Article {
     @Id
     private String id;
     private String nom;
     private String description;
     private String prix;
-
-
 
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -57,8 +53,6 @@ public class Article {
     public void setPrix(String prix) {
         this.prix = prix;
     }
-
-
 
     public File getImage() {
         return image;

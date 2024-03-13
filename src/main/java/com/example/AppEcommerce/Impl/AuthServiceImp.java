@@ -16,7 +16,7 @@ public interface AuthServiceImp {
 
     ResponseEntity<?> registerDelivery(SignUpDelivery signUpDelivery);
 
-    ResponseEntity<?> login(LoginRequest loginRequest);
+    JwtResonse login(LoginRequest loginRequest);
 
 
     ResponseEntity<?> registerSousAdmin(SignUpSousAdmin signUpAdmin);

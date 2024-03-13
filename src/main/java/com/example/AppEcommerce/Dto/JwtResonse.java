@@ -2,9 +2,6 @@ package com.example.AppEcommerce.Dto;
 
 import com.example.AppEcommerce.Model.User;
 import com.example.AppEcommerce.Repository.UserRepository;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

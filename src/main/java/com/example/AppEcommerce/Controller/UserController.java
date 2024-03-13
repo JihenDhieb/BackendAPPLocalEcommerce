@@ -138,5 +138,57 @@ public class UserController {
     public int countSousAdmin() {
         return userService.CountSousAdmin();
     }
+
+    @GetMapping("/getAllClient")
+    public List<User> getAllClients(){
+        return userService.getAllClient();
+    }
+    @GetMapping("/getAllDelivery")
+    public List<User> getAlDelivery(){
+        return userService.getAllDelivery();
+    }
+    @GetMapping("/getAllVendeur")
+    public List<User> getAllVendeur(){
+        return userService.getAllVendeur();
+    }
+    @GetMapping("/getAllSousAdmin")
+    public List<User> getAllSousAdmin(){
+        return userService.getAllSousAdmin();
+    }
+
+    @GetMapping("/getClientById/{id}")
+    public User getClientById(@PathVariable("id")String id){
+        return userService.getClientById(id);
+    }
+    @GetMapping("/getVendeurById/{id}")
+    public User getVendeurById(@PathVariable("id")String id){
+        return userService.getVendeurById(id);
+    }
+    @GetMapping("/getDeliveryById/{id}")
+    public User getDeliveryById(@PathVariable("id")String id){
+        return userService.getDeliveryById(id);
+    }
+    @GetMapping("/getSousAdminById/{id}")
+    public User getSousAdminById(@PathVariable("id")String id){
+        return userService.getSousAdminById(id);
+    }
+    @GetMapping("/getClientByName/{name}")
+    public List<User> getClientsByFirstname(@PathVariable("name")String name){
+        return userService.getClientsByName(name);
+    }
+    @GetMapping("/getClientsByLastname/{lastname}")
+    public List<User> getClientsByLastname(@PathVariable("lastname")String lastname){
+        return userService.getClientsByLastname(lastname);
+    }
+
+    @GetMapping("/getClientsByNameAndLastname/{firstname}/{lastname}")
+    public List<User> getClientsByNameAndLastname(@PathVariable("firstname")String firstname,@PathVariable("lastname")String lastname){
+        return userService.getClientsByNameAndLastname(firstname,lastname);
+    }
+
+
+
+
+
 }
 

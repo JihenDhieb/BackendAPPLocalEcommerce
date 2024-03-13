@@ -21,10 +21,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService implements UserServiceImpl {
@@ -330,5 +327,89 @@ public int CountDELIVERY() {
             }
         }
         return count;
+    }
+
+    @Override
+    public List<User> getAllClient() {
+        return userRepository.getAllByRole("CLIENT");
+    }
+
+    @Override
+    public List<User> getAllDelivery() {
+        return userRepository.getAllByRole("DELIVERY");
+    }
+
+    @Override
+    public List<User> getAllVendeur() {
+        return userRepository.getAllByRole("VENDEUR");
+    }
+
+    @Override
+    public List<User> getAllSousAdmin() {
+        return userRepository.getAllByRole("SOUS_ADMIN");
+    }
+
+    @Override
+    public User getClientById(String id) {
+        List<User> clients = this.getAllClient();
+        User client = null;
+        for (User user : clients){
+            if (Objects.equals(user.getId(), id)){
+                client = user;
+                break;
+            }
+        }
+        return client;
+    }
+    @Override
+    public User getDeliveryById(String id) {
+        List<User> deliverys = this.getAllDelivery();
+        User delivery = null;
+        for (User user : deliverys){
+            if (Objects.equals(user.getId(), id)){
+                delivery = user;
+                break;
+            }
+        }
+        return delivery;
+    }
+    @Override
+    public User getVendeurById(String id) {
+        List<User> vendeurs = this.getAllVendeur();
+        User vendeur = null;
+        for (User user : vendeurs){
+            if (Objects.equals(user.getId(), id)){
+                vendeur = user;
+                break;
+            }
+        }
+        return vendeur;
+    }
+    @Override
+    public User getSousAdminById(String id) {
+        List<User> sousAdmins = this.getAllSousAdmin();
+        User sousAdmin = null;
+        for (User user : sousAdmins){
+            if (Objects.equals(user.getId(), id)){
+                sousAdmin = user;
+                break;
+            }
+        }
+        return sousAdmin;
+    }
+
+    @Override
+    public List<User> getClientsByName(String name) {
+        return userRepository.getUsersByFirstName(name);
+    }
+
+    @Override
+    public List<User> getClientsByLastname(String name) {
+        return userRepository.getUsersByLastName(name);
+    }
+
+    @Override
+    public List<User> getClientsByNameAndLastname(String name,String lastname) {
+        return userRepository.getUsersByFirstNameAndLastName(name,lastname);
     }
 }

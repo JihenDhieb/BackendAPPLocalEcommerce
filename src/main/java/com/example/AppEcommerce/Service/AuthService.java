@@ -53,7 +53,7 @@ public class AuthService implements AuthServiceImp {
     public String registerUser(SignUpUser signUpUser){
         if (userRepository.existsByEmail(signUpUser.getEmail())) {
             String message = String.valueOf(new MessageResponse("Error:email is already taken!"));
-            return message;
+            return "{\"message\": \"" + message + "\"}";
         }
 
         User user =new User( signUpUser.getEmail(),encoder.encode(signUpUser.getPassword()), Role.CLIENT,signUpUser.getFirstName(),signUpUser.getLastName(),signUpUser.getPhone());
@@ -80,7 +80,7 @@ public class AuthService implements AuthServiceImp {
     }
 
     @Override
-    public ResponseEntity<?> login(LoginRequest loginRequest){
+    public JwtResonse login(LoginRequest loginRequest){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -91,11 +91,9 @@ public class AuthService implements AuthServiceImp {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
         User user = userRepository.findById(userDetails.getId()).get();
-        return ResponseEntity.ok(new JwtResonse(jwt,
+        return (new JwtResonse(jwt,
                 user,
                 roles));
-
-
     }
     @Override
     public ResponseEntity<?> registerSousAdmin(SignUpSousAdmin signUpAdmin){

@@ -14,51 +14,46 @@ import java.util.List;
 
 public interface UserServiceImpl   {
 
-    User getUserById(String id);
+  User getUserById(String id);
 
-    String  editUser(SignUpUser signUpUser);
+  String  editUser(SignUpUser signUpUser);
 
-    List<Pages> getPagesByUser(String id);
+  List<Pages> getPagesByUser(String id);
 
   String getPhoneByUser(String id);
 
+  void editPhone(String  phone, String id);
 
+  User getUserByPage(String id);
 
-    void editPhone(String  phone, String id);
-
-    User getUserByPage(String id);
-
-    void modifyStatusDelivery(String id);
+  void modifyStatusDelivery(String id);
 
   abstract String editDelivery(SignUpDelivery signUpDelivery);
 
-    String editLongLatDelivery(editLongLatDelivery longLatDelivery);
-
-
+  String editLongLatDelivery(editLongLatDelivery longLatDelivery);
 
 
   String editLongLatUser(editLongLatUser longLatUser);
 
   ResponseEntity<?> addImagesToUser(String id, MultipartFile fileProfile)throws IOException;
 
-    RevenueDate todayRevenue(String id);
+  RevenueDate todayRevenue(String id);
 
-    List<RevenueDate> weekRevenue(String id);
+  List<RevenueDate> weekRevenue(String id);
 
-    List<RevenueDate> monthRevenue(String id);
+  List<RevenueDate> monthRevenue(String id);
 
+  BenifitsVendor todayRevenueVendor(String id);
 
-    BenifitsVendor todayRevenueVendor(String id);
+  List<User> Livreurs();
 
-    List<User> Livreurs();
+  List<User> AdminUsers();
 
-    List<User> AdminUsers();
+  List<BenifitsVendor> weekRevenueVendor(String id);
 
-    List<BenifitsVendor> weekRevenueVendor(String id);
-
-    List<BenifitsVendor> monthRevenueVendor(String id);
-    //Admin Jihen
-    int CountUsers();
+  List<BenifitsVendor> monthRevenueVendor(String id);
+  //Admin Jihen
+  int CountUsers();
 
   //Nombre des AllClient
   int CountClient();
@@ -68,4 +63,26 @@ public interface UserServiceImpl   {
 
   //Nombre des AllDelivery
   int CountSousAdmin();
+
+  List<User> getAllClient();
+  List<User> getAllDelivery();
+  List<User> getAllVendeur();
+  List<User> getAllSousAdmin();
+
+  User getClientById(String id);
+
+  User getSousAdminById(String id);
+
+  List<User> getClientsByName(String name);
+  public User getDeliveryById(String id) ;
+  public User getVendeurById(String id) ;
+
+  List<User> getClientsByLastname(String name);
+
+  List<User> getClientsByNameAndLastname(String name,String lastname);
+
+
+
+
+
 }

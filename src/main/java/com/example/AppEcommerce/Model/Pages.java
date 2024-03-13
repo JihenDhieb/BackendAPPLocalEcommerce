@@ -20,8 +20,10 @@ public class Pages {
     private String email;
     private String phone ;
     private String  postalCode;
-     @Enumerated(EnumType.STRING)
-     private Activity activity;
+
+    @Enumerated(EnumType.STRING)
+    private Activity activity;
+
     @Enumerated(EnumType.STRING)
     private Region region;
 
@@ -30,6 +32,16 @@ public class Pages {
     private double latitude;
     private boolean etat;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_profil_id")
+    private File imageProfile;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_couverture_id")
+    private File imageCouverture;
+
+    private boolean enligne;
+
     public boolean isEtat() {
         return etat;
     }
@@ -37,7 +49,6 @@ public class Pages {
     public void setEtat(boolean etat) {
         this.etat = etat;
     }
-    private boolean enligne;
 
     public boolean isEnligne() {
         return enligne;
@@ -46,13 +57,6 @@ public class Pages {
     public void setEnligne(boolean enligne) {
         this.enligne = enligne;
     }
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_profil_id")
-    private File imageProfile;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_couverture_id")
-    private File imageCouverture;
 
     public Pages(){}
     public Pages(String title, String address, String email,String phone,String  postalCode, Activity activity,Region region, double longitude, double latitude,boolean etat,boolean enligne) {

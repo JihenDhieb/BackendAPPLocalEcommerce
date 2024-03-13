@@ -26,10 +26,10 @@ import static com.example.AppEcommerce.Service.ArticleService.RADIUS_OF_EARTH;
 public class StoryService implements StoryServiceImp {
     @Autowired
     private StoryRepository storyRepository;
-@Autowired
-private PagesRepository pagesRepository;
-@Autowired
-private FileRepository fileRepository;
+    @Autowired
+    private PagesRepository pagesRepository;
+    @Autowired
+    private FileRepository fileRepository;
 
     @Override
     public String addStory(String id, StoryDto storyDto){

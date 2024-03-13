@@ -15,7 +15,6 @@ import javax.persistence.Lob;
 public class File {
 
     @Id
-
     private String id;
 
     private String name;

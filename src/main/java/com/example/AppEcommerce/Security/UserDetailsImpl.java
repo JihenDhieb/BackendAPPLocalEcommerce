@@ -14,9 +14,7 @@ import java.util.Objects;
 
 public class UserDetailsImpl implements UserDetails {
 
-
     @Id
-
     private String id;
 
     private String email;
