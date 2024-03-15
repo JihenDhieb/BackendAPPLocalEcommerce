@@ -2,6 +2,7 @@ package com.example.AppEcommerce.Service;
 
 import com.example.AppEcommerce.Dto.*;
 import com.example.AppEcommerce.Enum.Role;
+import com.example.AppEcommerce.Enum.UserStatus;
 import com.example.AppEcommerce.Impl.UserServiceImpl;
 import com.example.AppEcommerce.Model.*;
 import com.example.AppEcommerce.Repository.CaisseRepository;
@@ -400,16 +401,137 @@ public int CountDELIVERY() {
 
     @Override
     public List<User> getClientsByName(String name) {
-        return userRepository.getUsersByFirstName(name);
+        return userRepository.getUsersByFirstName(name.toLowerCase());
     }
 
     @Override
     public List<User> getClientsByLastname(String name) {
-        return userRepository.getUsersByLastName(name);
+        return userRepository.getUsersByLastName(name.toLowerCase());
     }
 
     @Override
     public List<User> getClientsByNameAndLastname(String name,String lastname) {
-        return userRepository.getUsersByFirstNameAndLastName(name,lastname);
+        return userRepository.getUsersByFirstNameAndLastName(name.toLowerCase(),lastname.toLowerCase());
+    }
+
+    @Override
+    public String blockUser(String  idUser){
+        User user = userRepository.findById(idUser).orElse(null);
+        if(user == null){
+            return "User not found";
+        }else {
+            user.setUserStatus(UserStatus.BLOQUE);
+            userRepository.save(user);
+            return "User is blocked";
+        }
+    }
+
+    @Override
+    public String unblockUser(String  idUser){
+        User user = userRepository.findById(idUser).orElse(null);
+        if(user == null){
+            return "User not found";
+        }else {
+            user.setUserStatus((UserStatus.ACTIVE));
+            userRepository.save(user);
+            return "User is unblocked";
+        }
+    }
+
+    @Override
+    public String suspendUser(String  idUser){
+        User user = userRepository.findById(idUser).orElse(null);
+        if(user == null){
+            return "User not found";
+        }else {
+            user.setUserStatus(UserStatus.SUSPENDU);
+            return "User is suspended";
+        }
+    }
+
+    @Override
+    public String unsuspendUser(String  idUser){
+        User user = userRepository.findById(idUser).orElse(null);
+        if(user == null){
+            return "User not found";
+        }else {
+            user.setUserStatus(UserStatus.ACTIVE);
+            userRepository.save(user);
+            return "User is unsuspended";
+        }
+    }
+
+
+    @Override
+    public User updateDelivery(User user,String id) {
+        User user1 = userRepository.findById(id).orElse(null);
+        if(user1 == null){
+            return null;
+        }else {
+            user1.setFirstName(user.getFirstName());
+            user1.setLastName(user.getLastName());
+            user1.setEmail(user.getEmail());
+            user1.setPassword(user.getPassword());
+            user1.setPhone(user.getPhone());
+            user1.setVille(user.getVille());
+            userRepository.save(user1);
+        }
+        return user1;
+    }
+
+    @Override
+    public User addDelivery(SignUpDelivery signUpDelivery) {
+        User user = new User();
+        user.setFirstName(signUpDelivery.getFirstName());
+        user.setLastName(signUpDelivery.getLastName());
+        user.setEmail(signUpDelivery.getEmail());
+        user.setPassword(signUpDelivery.getPassword());
+        user.setPhone(signUpDelivery.getPhone());
+        user.setRole(Role.DELIVERY);
+        user.setVille(signUpDelivery.getVille());
+        user.setCin(signUpDelivery.getCin());
+        user.setUserStatus(UserStatus.ACTIVE);
+        return userRepository.save(user);
+    }
+
+    @Override
+    public int countActiveDelivery() {
+        List<User> livreurs = getAllDelivery();
+        int c=0;
+        for(User user : livreurs){
+            if(user.getUserStatus()==UserStatus.ACTIVE){
+                c++;
+            }
+        }
+        return c;
+    }
+
+    @Override
+    public int countSuspendedDelivery() {
+        List<User> livreurs = getAllDelivery();
+        int c=0;
+        for(User user : livreurs){
+            if(user.getUserStatus()==UserStatus.SUSPENDU){
+                c++;
+            }
+        }
+        return c;
+    }
+
+    @Override
+    public int countBlockedDelivery() {
+        List<User> livreurs = getAllDelivery();
+        int c=0;
+        for(User user : livreurs){
+            if(user.getUserStatus()==UserStatus.BLOQUE){
+                c++;
+            }
+        }
+        return c;
+    }
+
+    @Override
+    public int updateTaxesDelivery(String idDelivery, int taxPayed) {
+        return 0;
     }
 }

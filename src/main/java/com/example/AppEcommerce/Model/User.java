@@ -2,6 +2,7 @@ package com.example.AppEcommerce.Model;
 
 
 import com.example.AppEcommerce.Enum.Role;
+import com.example.AppEcommerce.Enum.UserStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -34,14 +35,15 @@ public class User {
     private boolean etat;
     private double commissiontotale;
     private boolean enLigne;
-
     private double longitude;
-
     private double latitude;
     private String ville;
     private double compteurC;
     private double t;
-    private String identifiant;
+    private int codePostal;
+    private int cin;
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
 
     private List<History> productId = new ArrayList<>();
     @Enumerated(EnumType.STRING)

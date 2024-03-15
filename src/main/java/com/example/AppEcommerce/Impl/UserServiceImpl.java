@@ -60,7 +60,6 @@ public interface UserServiceImpl   {
 
   //Nombre des AllDelivery
   int CountDELIVERY();
-
   //Nombre des AllDelivery
   int CountSousAdmin();
 
@@ -68,20 +67,23 @@ public interface UserServiceImpl   {
   List<User> getAllDelivery();
   List<User> getAllVendeur();
   List<User> getAllSousAdmin();
-
   User getClientById(String id);
-
   User getSousAdminById(String id);
-
   List<User> getClientsByName(String name);
   public User getDeliveryById(String id) ;
   public User getVendeurById(String id) ;
-
   List<User> getClientsByLastname(String name);
-
   List<User> getClientsByNameAndLastname(String name,String lastname);
-
-
+  String blockUser(String  idUser);
+  String unblockUser(String  idUser);
+  String suspendUser(String  idUser);
+  String unsuspendUser(String  idUser);
+  User updateDelivery(User user,String id);
+  User addDelivery(SignUpDelivery signUpDelivery);
+  int countActiveDelivery();
+  int countSuspendedDelivery();
+  int countBlockedDelivery();
+  int updateTaxesDelivery(String idDelivery,int taxPayed);
 
 
 

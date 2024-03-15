@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public class RevenueDate {
     String id;
-   double revenue;
+    double revenue;
     LocalDate date;
 
     public RevenueDate(double revenue, LocalDate date) {

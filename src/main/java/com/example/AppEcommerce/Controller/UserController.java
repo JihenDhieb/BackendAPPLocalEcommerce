@@ -14,6 +14,7 @@ import com.example.AppEcommerce.Service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -157,6 +158,7 @@ public class UserController {
     }
 
     @GetMapping("/getClientById/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public User getClientById(@PathVariable("id")String id){
         return userService.getClientById(id);
     }
@@ -176,6 +178,7 @@ public class UserController {
     public List<User> getClientsByFirstname(@PathVariable("name")String name){
         return userService.getClientsByName(name);
     }
+
     @GetMapping("/getClientsByLastname/{lastname}")
     public List<User> getClientsByLastname(@PathVariable("lastname")String lastname){
         return userService.getClientsByLastname(lastname);
