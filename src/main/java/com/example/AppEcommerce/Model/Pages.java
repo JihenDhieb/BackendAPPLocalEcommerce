@@ -4,10 +4,8 @@ import com.example.AppEcommerce.Enum.Activity;
 import com.example.AppEcommerce.Enum.Region;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @AllArgsConstructor

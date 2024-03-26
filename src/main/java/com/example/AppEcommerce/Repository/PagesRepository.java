@@ -12,7 +12,5 @@ import java.util.List;
 @Repository
 public interface PagesRepository extends MongoRepository<Pages,String> {
     List<Pages> findByActivity(Activity activity);
-
-
     Pages findByTitle(String pageTitle);
 }

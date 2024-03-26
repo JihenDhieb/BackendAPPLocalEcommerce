@@ -49,7 +49,10 @@ public class CaisseService implements CaisseServiceImp {
     @Override
     public String addCaisse(CaisseDto caisseDto) throws FirebaseMessagingException {
         User user = userService.getUserByPage(caisseDto.getIdPage());
-        Caisse caisse = new Caisse(caisseDto.getIdSender(), caisseDto.getAddress(), caisseDto.getStreetAddress(), caisseDto.getPhone(), caisseDto.getSelectedTime(), caisseDto.getDescription(), user.getId(), caisseDto.getSubTotal(),  caisseDto.getArticles(), LocalDate.now());
+        Caisse caisse = new Caisse(caisseDto.getIdSender(), caisseDto.getAddress(),
+                caisseDto.getStreetAddress(), caisseDto.getPhone(),
+                caisseDto.getSelectedTime(), caisseDto.getDescription(),
+                user.getId(), caisseDto.getSubTotal(),  caisseDto.getArticles(), LocalDate.now());
         Caisse caisse2 = caisseRepository.save(caisse);
         sendCaisseNotif(caisse2.getId());
         return caisse2.getId();

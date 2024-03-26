@@ -20,17 +20,9 @@ public interface ArticleServiceImpl {
 
     ResponseEntity<?> editimage(String id, MultipartFile file)throws IOException;
 
-
-
     ResponseEntity<?> editArticle(ArticleDto articleDto);
 
     void deleteArticle(String id);
-
-
-
-
-
-
 
     List<Article> findByCategory(Activity activity);
 
@@ -47,9 +39,6 @@ public interface ArticleServiceImpl {
     List<Pages> findLocalPatisserie(Activity activity, double lat1, double long1);
 
     List<Pages> findLocalCAFE(Activity activity, double lat1, double long1);
-
-
-
 
     Pages findPagebytitle(String pageTitle);
 }

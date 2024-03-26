@@ -17,7 +17,6 @@ import java.util.List;
   List<User> getAllByRole(String role);
   List<User> getUsersByFirstName(String firstname);
   List<User> getUsersByLastName(String lastname);
-
   List<User> getUsersByFirstNameAndLastName(String firstname,String lastname);
 
 

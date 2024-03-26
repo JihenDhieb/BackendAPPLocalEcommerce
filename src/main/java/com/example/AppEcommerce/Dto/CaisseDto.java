@@ -22,7 +22,7 @@ public class CaisseDto {
     String description;
     String idPage;
     Double subTotal;
-   String frais ;
+    String frais ;
     Double totalPrice;
     List<ArticleCaisse> articles;
 }

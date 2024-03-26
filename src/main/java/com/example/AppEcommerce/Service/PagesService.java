@@ -32,7 +32,9 @@ public class PagesService  implements PagesServiceImpl {
     @Override
     public String  addPage(String idUser, PagesDto pagesDto) {
         User user = userRepository.findById(idUser).orElseThrow(null);
-        Pages pages  =new Pages(pagesDto.getTitle(),pagesDto.getAddress(),pagesDto.getEmail(),pagesDto.getPhone(),pagesDto.getPostalCode(),pagesDto.getActivity(),pagesDto.getRegion(),pagesDto.getLongitude(),pagesDto.getLatitude(),false,false);
+        Pages pages  =new Pages(pagesDto.getTitle(),pagesDto.getAddress(),pagesDto.getEmail(),pagesDto.getPhone(),
+                pagesDto.getPostalCode(),pagesDto.getActivity(),pagesDto.getRegion(),pagesDto.getLongitude(),
+                pagesDto.getLatitude(),false,false);
         pagesRepository.save(pages);
         user.getPages().add(pages);
         userRepository.save(user);

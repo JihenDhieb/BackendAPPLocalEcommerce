@@ -74,7 +74,6 @@ public class NotificationService {
         return devices1;
     }
 
-
     public void sendVendorPushNotification(String idCaisse) throws FirebaseMessagingException {
         Caisse caisse = caisseRepository.findById(idCaisse)
                 .orElseThrow(()-> new NoSuchElementException("caisse not found with ID"+ idCaisse));

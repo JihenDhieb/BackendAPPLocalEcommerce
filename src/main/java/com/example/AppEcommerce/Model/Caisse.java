@@ -23,8 +23,6 @@ public class Caisse {
     String description;
     String idVendor;
     Double subTotal;
-
-
     List<ArticleCaisse> articles;
     String idDelivery;
     LocalDate date;
@@ -111,10 +109,6 @@ public class Caisse {
     public void setSubTotal(Double subTotal) {
         this.subTotal = subTotal;
     }
-
-
-
-
 
     public String getId() {
         return id;

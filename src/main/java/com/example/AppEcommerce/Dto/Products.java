@@ -14,7 +14,6 @@ public class Products {
     private String prix;
 
     public Products( String nom, String description,String prix) {
-
         this.nom = nom;
         this.description = description;
         this.prix= prix;

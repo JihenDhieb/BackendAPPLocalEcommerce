@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class getArticleCaisseDto {
     private String nom;
     private String prix;
-   int  qnt;
+    int qnt;
     private File image;
     private Pages page;
 }

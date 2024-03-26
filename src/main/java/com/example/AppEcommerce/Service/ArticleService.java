@@ -84,7 +84,9 @@ public class ArticleService  implements ArticleServiceImpl {
     List<Article> newArticles = new ArrayList<>();
     articles.forEach(article -> {
         pages.forEach(page-> {
-            if(article.getPage().getActivity() != Activity.RESTAURANTS && article.getPage().getActivity() != Activity.SUPERETTE && article.getPage().getActivity() != Activity.PATISSERIE  ){
+            if(article.getPage().getActivity() != Activity.RESTAURANTS &&
+                    article.getPage().getActivity() != Activity.SUPERETTE &&
+                    article.getPage().getActivity() != Activity.PATISSERIE  ){
                 if(article.getPage().getId().equals(page.getId())){
                     newArticles.add(article);
                 }
